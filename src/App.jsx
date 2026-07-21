@@ -26,6 +26,7 @@ const OrdersPage = lazy(() => import("./pages/admin/OrdersPage"));
 const UsersPage = lazy(() => import("./pages/admin/UsersPage"));
 const ProductsPage = lazy(() => import("./pages/admin/ProductsPage"));
 const BannersPage = lazy(() => import("./pages/admin/BannersPage"));
+const CategoriesPage = lazy(() => import("./pages/admin/CategoriesPage"));
 
 function LoadingSpinner() {
   return (
@@ -66,6 +67,7 @@ function App() {
                         <Route path="users" element={<UsersPage />} />
                         <Route path="products" element={<ProductsPage />} />
                         <Route path="banners" element={<BannersPage />} />
+                        <Route path="categories" element={<CategoriesPage />} />
                       </Route>
                       <Route path="*" element={<NotFoundPage />} />
                     </Routes>

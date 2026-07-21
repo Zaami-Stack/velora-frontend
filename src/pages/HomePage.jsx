@@ -13,7 +13,7 @@ const sortMap = { "Featured": "", "Newest": "newest", "Price: Low to High": "pri
 const sortOptions = Object.keys(sortMap);
 const allCategories = ["All", "New In", "Dresses", "Tops", "Pants", "Knitwear", "Shoes", "Bags", "Blazers", "Accessories"];
 
-const categoryCards = [
+const fallbackCategoryCards = [
   { name: "Dresses", image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=560&fit=crop" },
   { name: "Tops", image: "https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=400&h=560&fit=crop" },
   { name: "Shoes", image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=400&h=560&fit=crop" },
@@ -51,6 +51,7 @@ export default function HomePage() {
   const [subscribed, setSubscribed] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [bannerSlides, setBannerSlides] = useState([]);
+  const [shopCategories, setShopCategories] = useState([]);
   const toast = useToast();
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -81,6 +82,24 @@ export default function HomePage() {
     fetchBanners();
     return () => { cancelled = true; };
   }, [t]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchShopCategories() {
+      try {
+        const data = await api.products.shopCategories();
+        if (!cancelled && data.length > 0) {
+          setShopCategories(data.map((c) => ({
+            name: c.name,
+            slug: c.slug,
+            image: c.image,
+          })));
+        }
+      } catch { /* use fallback */ }
+    }
+    fetchShopCategories();
+    return () => { cancelled = true; };
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -185,13 +204,13 @@ export default function HomePage() {
               <button onClick={() => setActiveCategory("All")} className="text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline underline-offset-4 transition-colors cursor-pointer">{t("common.viewAll")}</button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3">
-              {categoryCards.map((cat) => (
+              {(shopCategories.length > 0 ? shopCategories : fallbackCategoryCards).map((cat) => (
                 <button key={cat.name} onClick={() => { setActiveCategory(cat.name); navigate("/"); }}
                   className="group relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-white/5 rounded-sm cursor-pointer">
-                  <img src={cat.image} alt={t(categoryKeys[cat.name])} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   <div className="absolute inset-0 flex flex-col items-center justify-end pb-6">
-                    <span className="text-sm font-medium text-white tracking-wide mb-1">{t(categoryKeys[cat.name])}</span>
+                    <span className="text-sm font-medium text-white tracking-wide mb-1">{cat.name}</span>
                     <span className="text-[10px] text-white/60 uppercase tracking-widest">{t("product.shopNow")}</span>
                   </div>
                 </button>

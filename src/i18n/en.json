@@ -356,6 +356,7 @@
     "customers": "Customers",
     "products": "Products",
     "banners": "Banners",
+    "categories": "Categories",
     "users": "Users"
   },
   "dashboard": {
@@ -488,5 +489,30 @@
     "bannerDeleted": "Banner deleted",
     "noBanners": "No banners yet",
     "noBannersDesc": "Add a banner to display on the homepage carousel"
+  },
+  "categoriesPage": {
+    "heading": "Categories",
+    "description": "Manage the categories shown on the homepage",
+    "addCategory": "Add Category",
+    "editCategory": "Edit Category",
+    "name": "Name",
+    "namePlaceholder": "e.g. Dresses",
+    "slug": "Slug",
+    "slugPlaceholder": "e.g. dresses",
+    "slugHint": "Auto-generated from name if left empty",
+    "imageUrl": "Image URL",
+    "sortOrder": "Sort Order",
+    "active": "Active",
+    "inactive": "Inactive",
+    "order": "Order",
+    "createCategory": "Create Category",
+    "deleteCategory": "Delete Category",
+    "deleteConfirm": "Are you sure you want to delete",
+    "requiredFields": "Category name is required",
+    "categoryCreated": "Category created",
+    "categoryUpdated": "Category updated",
+    "categoryDeleted": "Category deleted",
+    "noCategories": "No categories yet",
+    "noCategoriesDesc": "Add categories to show on the homepage"
   }
 }

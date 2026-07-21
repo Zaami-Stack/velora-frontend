@@ -356,6 +356,7 @@
     "customers": "Clients",
     "products": "Produits",
     "banners": "Bannières",
+    "categories": "Catégories",
     "users": "Utilisateurs"
   },
   "dashboard": {
@@ -488,5 +489,30 @@
     "bannerDeleted": "Bannière supprimée",
     "noBanners": "Aucune bannière",
     "noBannersDesc": "Ajoutez une bannière pour l'afficher sur le carrousel de la page d'accueil"
+  },
+  "categoriesPage": {
+    "heading": "Catégories",
+    "description": "Gérez les catégories affichées sur la page d'accueil",
+    "addCategory": "Ajouter une catégorie",
+    "editCategory": "Modifier la catégorie",
+    "name": "Nom",
+    "namePlaceholder": "ex. Robes",
+    "slug": "Slug",
+    "slugPlaceholder": "ex. robes",
+    "slugHint": "Généré automatiquement si laissé vide",
+    "imageUrl": "URL de l'image",
+    "sortOrder": "Ordre d'affichage",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "order": "Ordre",
+    "createCategory": "Créer la catégorie",
+    "deleteCategory": "Supprimer la catégorie",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer",
+    "requiredFields": "Le nom de la catégorie est requis",
+    "categoryCreated": "Catégorie créée",
+    "categoryUpdated": "Catégorie mise à jour",
+    "categoryDeleted": "Catégorie supprimée",
+    "noCategories": "Aucune catégorie",
+    "noCategoriesDesc": "Ajoutez des catégories à afficher sur la page d'accueil"
   }
 }
