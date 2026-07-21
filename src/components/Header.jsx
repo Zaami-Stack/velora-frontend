@@ -58,6 +58,10 @@ export default function Header({ onMenuToggle }) {
     }
   };
 
+  useEffect(() => {
+    return () => clearTimeout(searchTimer.current);
+  }, []);
+
   const handleSearchKeyDown = (e) => {
     if (e.key === "Escape") {
       setSearchOpen(false);
@@ -171,7 +175,7 @@ export default function Header({ onMenuToggle }) {
                       <img src={item.image} alt={item.name} className="w-16 h-20 object-cover rounded-lg" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${item.price} {item.selectedSize && `· ${item.selectedSize}`}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${Number(item.price).toFixed(2)} {item.selectedSize && `· ${item.selectedSize}`}</p>
                         <div className="flex items-center gap-2 mt-2">
                           <button onClick={() => updateQuantity(item.cartKey, item.quantity - 1)} className="w-6 h-6 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/20 text-xs cursor-pointer">-</button>
                           <span className="text-xs font-medium w-4 text-center text-gray-900 dark:text-white">{item.quantity}</span>

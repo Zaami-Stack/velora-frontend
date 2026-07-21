@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback } from "react";
+import { createContext, useContext, useState, useCallback, useRef, useEffect } from "react";
 
 const ToastContext = createContext(null);
 
@@ -6,12 +6,20 @@ let toastId = 0;
 
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);
+  const timers = useRef({});
+
+  useEffect(() => {
+    return () => {
+      Object.values(timers.current).forEach(clearTimeout);
+    };
+  }, []);
 
   const addToast = useCallback((message, type = "success", duration = 3000) => {
     const id = ++toastId;
     setToasts((prev) => [...prev, { id, message, type }]);
-    setTimeout(() => {
+    timers.current[id] = setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
+      delete timers.current[id];
     }, duration);
   }, []);
 

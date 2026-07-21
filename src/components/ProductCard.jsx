@@ -20,8 +20,9 @@ export default function ProductCard({ product, variant = "default" }) {
   const handleAddToCart = (e, size) => {
     e.stopPropagation();
     const s = size || quickSize || "M";
-    const colorHex = hoveredColor?.hex || product.colors?.[0]?.hex || product.colors?.[0] || null;
-    addItem({ ...product, selectedSize: s, selectedColor: colorHex, cartKey: `${product.id}-${s}-0` });
+    const colorIdx = hoveredColor ? product.colors.findIndex((c) => (typeof c === "string" ? c : c.hex) === hoveredColor.hex) : 0;
+    const colorHex = hoveredColor?.hex || product.colors?.[0]?.hex || (typeof product.colors?.[0] === "string" ? product.colors[0] : null) || null;
+    addItem({ ...product, selectedSize: s, selectedColor: colorHex, cartKey: `${product.id}-${s}-${colorIdx >= 0 ? colorIdx : 0}` });
     toast.success(`${product.name} (${s}) added to bag`);
     setQuickSize(null);
   };

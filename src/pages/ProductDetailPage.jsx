@@ -141,11 +141,11 @@ export default function ProductDetailPage() {
                   {product.colors.map((color, i) => (
                     <button key={i} onClick={() => setSelectedColor(i)}
                       className={`w-8 h-8 rounded-full border-2 transition-all cursor-pointer ${selectedColor === i ? "border-gray-900 dark:border-white scale-110" : "border-gray-200 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/30"}`}
-                      style={{ backgroundColor: color.hex }} />
+                      style={{ backgroundColor: color.hex || "#ccc" }} />
                   ))}
                 </div>
-                {product.colors[selectedColor]?.image && (
-                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-2">Showing {product.colors[selectedColor].hex} variant</p>
+                {product.colors[selectedColor]?.image && product.colors[selectedColor]?.hex && (
+                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-2">Viewing color variant</p>
                 )}
               </div>
             )}

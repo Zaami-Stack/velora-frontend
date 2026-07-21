@@ -40,7 +40,7 @@ export default function OrdersPage() {
     setLoading(true);
     try {
       const data = await api.admin.orders(status);
-      setOrders(data);
+      setOrders(Array.isArray(data) ? data : data?.orders || []);
       setError(null);
     } catch (err) {
       setError(err.message);

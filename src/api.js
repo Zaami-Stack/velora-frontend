@@ -1,14 +1,32 @@
 const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
+function toCamel(obj) {
+  if (obj === null || obj === undefined || typeof obj !== "object") return obj;
+  if (Array.isArray(obj)) return obj.map(toCamel);
+  const result = {};
+  for (const [key, value] of Object.entries(obj)) {
+    const camelKey = key.replace(/_([a-z])/g, (_, c) => c.toUpperCase());
+    result[camelKey] = toCamel(value);
+  }
+  return result;
+}
+
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem("velora_token");
   const headers = { "Content-Type": "application/json", ...options.headers };
   if (token) headers.Authorization = `Bearer ${token}`;
 
   const res = await fetch(`${API_URL}${endpoint}`, { ...options, headers });
-  const data = await res.json();
+  let data;
+  try {
+    const text = await res.text();
+    data = text ? JSON.parse(text) : {};
+  } catch {
+    if (!res.ok) throw new Error(res.statusText || "Something went wrong");
+    return {};
+  }
   if (!res.ok) throw new Error(data.error || "Something went wrong");
-  return data;
+  return toCamel(data);
 }
 
 export const api = {
