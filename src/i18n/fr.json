@@ -28,6 +28,7 @@
     "fullName": "Nom complet",
     "name": "Nom",
     "none": "Aucun",
+    "remove": "Retirer",
     "admin": "Admin",
     "client": "Client",
     "items": "articles",
@@ -326,7 +327,10 @@
     "sq5": "Comment s'appelait votre professeur préféré ?",
     "sq6": "Quelle était la marque de votre première voiture ?",
     "sq7": "Quel est votre plat préféré ?",
-    "sq8": "Comment s'appelle la rue où vous avez grandi ?"
+    "sq8": "Comment s'appelle la rue où vous avez grandi ?",
+    "resetPasswordSubtitle": "Entrez votre email et nous vous aiderons à réinitialiser votre mot de passe.",
+    "securityQuestionStepDesc": "Répondez à votre question de sécurité pour réinitialiser votre mot de passe.",
+    "passwordsDoNotMatch": "Les mots de passe ne correspondent pas"
   },
   "account": {
     "myAccount": "Mon compte",
@@ -510,7 +514,9 @@
     "bannerUpdated": "Bannière mise à jour",
     "bannerDeleted": "Bannière supprimée",
     "noBanners": "Aucune bannière",
-    "noBannersDesc": "Ajoutez une bannière pour l'afficher sur le carrousel de la page d'accueil"
+    "noBannersDesc": "Ajoutez une bannière pour l'afficher sur le carrousel de la page d'accueil",
+    "order": "Ordre",
+    "visible": "Visible"
   },
   "categoriesPage": {
     "heading": "Catégories",
@@ -599,7 +605,23 @@
     },
     "usage": "Utilisations",
     "expires": "Expire",
-    "noExpiry": "Jamais"
+    "noExpiry": "Jamais",
+    "heading": "Coupons de Réduction",
+    "couponCount": "{{count}} coupons",
+    "createCoupon": "Créer un Coupon",
+    "deleteCoupon": "Supprimer le Coupon",
+    "deleteConfirm": "Supprimer ce coupon ?",
+    "discount": "Réduction",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "expired": "Expiré",
+    "couponUpdated": "Coupon mis à jour",
+    "couponCreated": "Coupon créé",
+    "couponDeleted": "Coupon supprimé",
+    "requiredFields": "Le code et la valeur de réduction sont requis",
+    "minOrderPlaceholder": "0 = pas de minimum",
+    "maxUsesPlaceholder": "Laisser vide pour illimité",
+    "actions": "Actions"
   },
   "reviewsPage": {
     "title": "Avis Clients",
@@ -616,7 +638,18 @@
     "confirmDelete": "Supprimer cet avis?",
     "product": "Produit",
     "by": "par",
-    "on": "le"
+    "on": "le",
+    "heading": "Avis Clients",
+    "description": "Modérez et gérez les avis produits",
+    "approveFailed": "Échec de l'approbation",
+    "rejectFailed": "Échec du rejet",
+    "deleteFailed": "Échec de la suppression",
+    "deleteReview": "Supprimer l'Avis",
+    "deleteWarning": "Cette action est irréversible.",
+    "noReviewsDesc": "Les avis clients apparaîtront ici une fois soumis.",
+    "untitled": "Avis sans titre",
+    "anonymous": "Anonyme",
+    "unknownProduct": "Produit inconnu"
   },
   "stockPage": {
     "title": "Gestion des Stocks",
@@ -632,7 +665,17 @@
     "addProducts": "Ajoutez d'abord des produits pour gérer leur stock.",
     "product": "Produit",
     "stockLevel": "Niveau de Stock",
-    "actions": "Actions"
+    "actions": "Actions",
+    "heading": "Gestion des Stocks",
+    "description": "Suivez et mettez à jour les niveaux de stock",
+    "setAllUnlimited": "Tout Mettre Illimité",
+    "allUnlimited": "Tous les produits mis en stock illimité",
+    "stockUpdated": "Stock mis à jour",
+    "currentStock": "Stock Actuel",
+    "newStock": "Nouveau Stock",
+    "stockPlaceholder": "Quantité",
+    "status": "Statut",
+    "action": "Action"
   },
   "aboutPage": {
     "title": "À Propos de Velora",
@@ -649,7 +692,16 @@
     "sustainableDesc": "Mode respectueuse de notre planète",
     "customerFirst": "Client d'Abord",
     "customerFirstDesc": "Votre satisfaction est notre priorité",
-    "shopNow": "Acheter Maintenant"
+    "shopNow": "Acheter Maintenant",
+    "badge": "Notre Histoire",
+    "heroTitle": "Notre Histoire",
+    "heroSubtitle": "Le voyage de l'élégance intemporelle",
+    "storyTitle": "Notre Histoire",
+    "storyText": "Velora a été fondée avec une vision singulière : apporter une élégance intemporelle à la garde-robe moderne. Chaque pièce de notre collection est sélectionnée pour ceux qui apprécient le luxe discret et la sophistication sans effort.",
+    "missionText": "Nous croyons que la mode devrait être à la fois belle et responsable. Notre engagement envers la qualité signifie que chaque vêtement est conçu pour durer, en utilisant des matériaux premium et une attention méticuleuse aux détails.",
+    "ctaTitle": "Découvrez Notre Collection",
+    "ctaSubtitle": "Explorez les dernières tendances de la mode de luxe",
+    "ctaText": "Acheter Maintenant"
   },
   "contactPage": {
     "title": "Contactez-Nous",
@@ -665,7 +717,20 @@
     "send": "Envoyer le Message",
     "sent": "Message envoyé ! Nous vous répondrons bientôt.",
     "social": "Suivez-Nous",
-    "monSat": "Lun-Sam: 9h00 - 19h00"
+    "monSat": "Lun-Sam: 9h00 - 19h00",
+    "heroTitle": "Contactez-Nous",
+    "heroSubtitle": "Nous aimerions avoir de vos nouvelles",
+    "infoTitle": "Informations de Contact",
+    "socialTitle": "Suivez-Nous",
+    "formTitle": "Envoyez un Message",
+    "nameLabel": "Votre Nom",
+    "namePlaceholder": "Jean Dupont",
+    "emailLabel": "Votre Email",
+    "emailPlaceholder": "jean@exemple.com",
+    "messageLabel": "Votre Message",
+    "messagePlaceholder": "Dites-nous comment nous pouvons vous aider...",
+    "sending": "Envoi en cours...",
+    "successToast": "Message envoyé ! Nous vous répondrons bientôt."
   },
   "sizeGuide": {
     "title": "Guide des Tailles",
