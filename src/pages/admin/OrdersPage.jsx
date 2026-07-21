@@ -130,9 +130,9 @@ export default function OrdersPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-white">{order.id}</p>
-                  <p className="text-xs text-gray-500 mt-0.5 truncate max-w-[150px] sm:max-w-none">{order.customer_name} &middot; <span className="hidden sm:inline">{order.customer_email}</span><span className="sm:hidden">{order.customer_email?.split("@")[0]}</span>{order.customer_phone && <span className="hidden sm:inline"> &middot; {order.customer_phone}</span>}</p>
+                  <p className="text-xs text-gray-500 mt-0.5 truncate max-w-[150px] sm:max-w-none">{order.customerName} &middot; <span className="hidden sm:inline">{order.customerEmail}</span><span className="sm:hidden">{order.customerEmail?.split("@")[0]}</span>{order.customerPhone && <span className="hidden sm:inline"> &middot; {order.customerPhone}</span>}</p>
                 </div>
-                <p className="text-xs text-gray-500 hidden sm:block">{new Date(order.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
+                <p className="text-xs text-gray-500 hidden sm:block">{order.createdAt ? new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}</p>
                 <p className="text-sm font-bold text-white">${Number(order.total).toFixed(2)}</p>
                 <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold capitalize ${statusColors[order.status] || "bg-gray-400/10 text-gray-400"}`}>
                   {order.status}
@@ -180,13 +180,13 @@ export default function OrdersPage() {
                           ))}
                         </div>
                       </div>
-                      {order.shipping_address && Object.keys(order.shipping_address).length > 0 && (
+                      {order.shippingAddress && Object.keys(order.shippingAddress).length > 0 && (
                         <div>
                           <h4 className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Customer Info</h4>
                           <div className="p-3 rounded-xl bg-white/[0.02] text-sm text-gray-300 space-y-0.5">
-                            {order.customer_name && <p className="text-white font-medium">{order.customer_name}</p>}
-                            {order.customer_email && <p className="text-gray-400">{order.customer_email}</p>}
-                            {order.customer_phone && <p className="text-gray-400">{order.customer_phone}</p>}
+                            {order.customerName && <p className="text-white font-medium">{order.customerName}</p>}
+                            {order.customerEmail && <p className="text-gray-400">{order.customerEmail}</p>}
+                            {order.customerPhone && <p className="text-gray-400">{order.customerPhone}</p>}
                           </div>
                         </div>
                       )}

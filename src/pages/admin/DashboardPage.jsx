@@ -130,10 +130,10 @@ export default function DashboardPage() {
                 <tr key={order.id} className="border-b border-white/5 last:border-0 hover:bg-white/[0.02] transition-colors cursor-pointer" onClick={() => navigate("/admin/orders")}>
                   <td className="px-6 py-3.5 text-sm font-medium text-white">{order.id}</td>
                   <td className="px-6 py-3.5">
-                    <p className="text-sm text-gray-300">{order.customer_name}</p>
-                    <p className="text-xs text-gray-500">{order.customer_email}</p>
+                    <p className="text-sm text-gray-300">{order.customerName}</p>
+                    <p className="text-xs text-gray-500">{order.customerEmail}</p>
                   </td>
-                  <td className="px-6 py-3.5 text-sm text-gray-400">{new Date(order.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
+                  <td className="px-6 py-3.5 text-sm text-gray-400">{new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
                   <td className="px-6 py-3.5 text-sm font-semibold text-white">${Number(order.total).toFixed(2)}</td>
                   <td className="px-6 py-3.5">
                     <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold capitalize ${statusColors[order.status] || "bg-gray-400/10 text-gray-400"}`}>
@@ -161,8 +161,8 @@ export default function DashboardPage() {
               </div>
               <div className="flex items-center justify-between">
                 <div className="min-w-0">
-                  <p className="text-xs text-gray-300 truncate">{order.customer_name}</p>
-                  <p className="text-[10px] text-gray-500">{new Date(order.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
+                  <p className="text-xs text-gray-300 truncate">{order.customerName}</p>
+                  <p className="text-[10px] text-gray-500">{new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
                 </div>
                 <div className="text-right ml-3">
                   <p className="text-xs font-semibold text-white">${Number(order.total).toFixed(2)}</p>

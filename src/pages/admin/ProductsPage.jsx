@@ -9,7 +9,7 @@ const emptyForm = {
   name: "",
   category: "Dresses",
   price: "",
-  original_price: "",
+  originalPrice: "",
   image: "",
   badge: "",
   rating: "4.5",
@@ -64,7 +64,7 @@ export default function ProductsPage() {
       name: p.name,
       category: p.category,
       price: String(p.price),
-      original_price: p.original_price ? String(p.original_price) : "",
+      originalPrice: p.originalPrice ? String(p.originalPrice) : "",
       image: p.image,
       badge: p.badge || "",
       rating: String(p.rating),
@@ -114,7 +114,7 @@ export default function ProductsPage() {
         name: form.name,
         category: form.category,
         price: Number(form.price),
-        original_price: form.original_price ? Number(form.original_price) : null,
+        originalPrice: form.originalPrice ? Number(form.originalPrice) : null,
         image: form.image,
         badge: form.badge || null,
         rating: Number(form.rating) || 0,
@@ -201,7 +201,7 @@ export default function ProductsPage() {
                   <p className="text-xs text-gray-500 mt-0.5">{p.category} &middot; ID: {p.id}</p>
                   <div className="flex items-center gap-2 mt-1.5">
                     <span className="text-sm font-semibold text-white">${Number(p.price).toFixed(2)}</span>
-                    {p.original_price && <span className="text-xs text-gray-500 line-through">${Number(p.original_price).toFixed(2)}</span>}
+                    {p.originalPrice && <span className="text-xs text-gray-500 line-through">${Number(p.originalPrice).toFixed(2)}</span>}
                   </div>
                   <div className="flex items-center gap-2 mt-1.5">
                     {p.badge ? (
@@ -261,7 +261,7 @@ export default function ProductsPage() {
                 </div>
                 <div>
                   <label className="block text-xs font-medium text-gray-400 mb-1.5">Original Price</label>
-                  <input type="number" step="0.01" value={form.original_price} onChange={(e) => setForm({ ...form, original_price: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder="129.00" />
+                  <input type="number" step="0.01" value={form.originalPrice} onChange={(e) => setForm({ ...form, originalPrice: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder="129.00" />
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

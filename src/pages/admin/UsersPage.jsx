@@ -80,12 +80,12 @@ export default function UsersPage() {
         </div>
         <div className="bg-white/[0.03] rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
           <p className="text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5 sm:mb-2">Total Revenue</p>
-          <p className="text-xl sm:text-2xl font-bold text-white">${users.reduce((sum, u) => sum + Number(u.total_spent || 0), 0).toFixed(2)}</p>
+          <p className="text-xl sm:text-2xl font-bold text-white">${users.reduce((sum, u) => sum + Number(u.totalSpent || 0), 0).toFixed(2)}</p>
         </div>
         <div className="bg-white/[0.03] rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 col-span-2 sm:col-span-1">
           <p className="text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5 sm:mb-2">Avg. Order Value</p>
           <p className="text-xl sm:text-2xl font-bold text-white">
-            ${users.length > 0 ? (users.reduce((sum, u) => sum + Number(u.total_spent || 0), 0) / Math.max(users.reduce((sum, u) => sum + u.order_count, 0), 1)).toFixed(2) : "0.00"}
+            ${users.length > 0 ? (users.reduce((sum, u) => sum + Number(u.totalSpent || 0), 0) / Math.max(users.reduce((sum, u) => sum + u.orderCount, 0), 1)).toFixed(2) : "0.00"}
           </p>
         </div>
       </div>
@@ -121,9 +121,9 @@ export default function UsersPage() {
                     </div>
                   </td>
                   <td className="px-6 py-3.5 text-sm text-gray-400">{u.phone || "—"}</td>
-                  <td className="px-6 py-3.5 text-sm text-gray-400">{new Date(u.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
-                  <td className="px-6 py-3.5 text-sm text-white font-medium">{u.order_count}</td>
-                  <td className="px-6 py-3.5 text-sm font-semibold text-white">${Number(u.total_spent).toFixed(2)}</td>
+                  <td className="px-6 py-3.5 text-sm text-gray-400">{new Date(u.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
+                  <td className="px-6 py-3.5 text-sm text-white font-medium">{u.orderCount}</td>
+                  <td className="px-6 py-3.5 text-sm font-semibold text-white">${Number(u.totalSpent).toFixed(2)}</td>
                   <td className="px-6 py-3.5">
                     {Number(u.isAdmin || u.is_admin) === 1 ? (
                       <span className="inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/10 text-white ring-1 ring-white/20">Admin</span>
@@ -158,9 +158,9 @@ export default function UsersPage() {
                 </div>
               </div>
               <div className="flex items-center gap-4 mt-2 ml-12">
-                <span className="text-[10px] text-gray-500">{u.order_count} orders</span>
-                <span className="text-[10px] font-semibold text-white">${Number(u.total_spent).toFixed(2)}</span>
-                <span className="text-[10px] text-gray-500">{new Date(u.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
+                <span className="text-[10px] text-gray-500">{u.orderCount} orders</span>
+                <span className="text-[10px] font-semibold text-white">${Number(u.totalSpent).toFixed(2)}</span>
+                <span className="text-[10px] text-gray-500">{new Date(u.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
               </div>
             </div>
           ))}
