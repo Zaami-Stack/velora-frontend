@@ -38,7 +38,11 @@ export default function Header({ onMenuToggle }) {
       }
     }
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    document.addEventListener("touchstart", handleClick);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("touchstart", handleClick);
+    };
   }, []);
 
   const handleSearch = (q) => {
@@ -85,25 +89,25 @@ export default function Header({ onMenuToggle }) {
           <Link to="/" className="flex items-center"><Logo size="sm" /></Link>
         </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1 sm:gap-1.5">
           <div ref={searchRef} className="relative">
             {searchOpen ? (
-              <div className="flex items-center gap-2 fixed inset-x-0 top-0 z-50 bg-white dark:bg-gray-950 p-3 border-b border-gray-100 dark:border-white/5 lg:static lg:inset-auto lg:z-auto lg:bg-transparent lg:dark:bg-transparent lg:p-0 lg:border-0">
+              <div className="flex items-center gap-2 fixed inset-x-0 top-0 z-50 bg-white dark:bg-gray-950 p-2 sm:p-3 border-b border-gray-100 dark:border-white/5 lg:static lg:inset-auto lg:z-auto lg:bg-transparent lg:dark:bg-transparent lg:p-0 lg:border-0">
                 <input
                   autoFocus type="text" value={searchQuery} onChange={(e) => handleSearch(e.target.value)} onKeyDown={handleSearchKeyDown} placeholder={t("common.search")}
-                  className="flex-1 lg:w-72 px-4 py-2 text-sm border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-full focus:outline-none focus:border-gray-400 dark:focus:border-white/20 focus:ring-2 focus:ring-gray-100 dark:focus:ring-white/10 transition-all"
+                  className="flex-1 lg:w-72 px-3 sm:px-4 py-2 text-sm border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-full focus:outline-none focus:border-gray-400 dark:focus:border-white/20 focus:ring-2 focus:ring-gray-100 dark:focus:ring-white/10 transition-all"
                 />
                 <button onClick={() => { setSearchOpen(false); setSearchQuery(""); setSearchResults([]); }} className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
             ) : (
-              <button onClick={() => setSearchOpen(true)} className="p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
+              <button onClick={() => setSearchOpen(true)} className="p-1.5 sm:p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
               </button>
             )}
             {searchOpen && searchResults.length > 0 && (
-              <div className="fixed inset-x-0 top-14 lg:absolute lg:top-full lg:mt-2 lg:right-0 lg:w-80 bg-white dark:bg-gray-900 lg:rounded-xl shadow-xl border border-gray-100 dark:border-white/10 overflow-hidden z-50 max-h-[60vh] lg:max-h-80 overflow-y-auto mx-4 lg:mx-0 mt-2 lg:mt-2 rounded-xl lg:rounded-xl">
+              <div className="fixed inset-x-0 top-14 mx-2 mt-2 sm:mx-4 sm:mt-2 lg:absolute lg:top-full lg:mt-2 lg:right-0 lg:w-80 lg:mx-0 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-100 dark:border-white/10 overflow-hidden z-50 max-h-[60vh] lg:max-h-80 overflow-y-auto">
                 {searchResults.map((p) => (
                   <button key={p.id} onClick={() => { setSearchOpen(false); setSearchQuery(""); setSearchResults([]); navigate(`/product/${p.id}`); }}
                     className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors text-left cursor-pointer">
@@ -114,13 +118,13 @@ export default function Header({ onMenuToggle }) {
               </div>
             )}
             {searchOpen && searchQuery.trim().length > 0 && !searching && searchResults.length === 0 && (
-              <div className="fixed inset-x-0 top-14 lg:absolute lg:top-full lg:mt-2 lg:right-0 lg:w-80 bg-white dark:bg-gray-900 lg:rounded-xl shadow-xl border border-gray-100 dark:border-white/10 overflow-hidden z-50 p-6 text-center mx-4 lg:mx-0 mt-2 lg:mt-2 rounded-xl lg:rounded-xl">
+              <div className="fixed inset-x-0 top-14 mx-2 mt-2 sm:mx-4 sm:mt-2 lg:absolute lg:top-full lg:mt-2 lg:right-0 lg:w-80 lg:mx-0 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-100 dark:border-white/10 overflow-hidden z-50 p-6 text-center">
                 <p className="text-sm text-gray-400 dark:text-gray-500">{t("common.noResults")}</p>
               </div>
             )}
           </div>
 
-          <div className="flex items-center bg-gray-100 dark:bg-white/10 rounded-full p-0.5">
+          <div className="hidden sm:flex items-center bg-gray-100 dark:bg-white/10 rounded-full p-0.5">
             <button
               onClick={() => setLang("en")}
               className={`px-2.5 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer ${
@@ -143,12 +147,12 @@ export default function Header({ onMenuToggle }) {
             </button>
           </div>
 
-          <button onClick={() => navigate("/wishlist")} className="relative p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
+          <button onClick={() => navigate("/wishlist")} className="relative p-1.5 sm:p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" /></svg>
             {wishlistCount > 0 && <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center">{wishlistCount}</span>}
           </button>
 
-          <button onClick={toggle} className="p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
+          <button onClick={toggle} className="hidden sm:block p-1.5 sm:p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
             {dark ? (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" /></svg>
             ) : (
@@ -157,7 +161,7 @@ export default function Header({ onMenuToggle }) {
           </button>
 
           <div ref={userRef} className="relative">
-            <button onClick={() => user ? setUserMenuOpen(!userMenuOpen) : navigate("/login")} className="p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
+            <button onClick={() => user ? setUserMenuOpen(!userMenuOpen) : navigate("/login")} className="p-1.5 sm:p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
               {user ? (
                 <div className="w-5 h-5 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 flex items-center justify-center text-[10px] font-bold">{user.name.charAt(0).toUpperCase()}</div>
               ) : (
@@ -165,7 +169,7 @@ export default function Header({ onMenuToggle }) {
               )}
             </button>
             {userMenuOpen && user && (
-              <div className="absolute top-full mt-2 right-0 w-56 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-100 dark:border-white/10 overflow-hidden z-50">
+              <div className="fixed sm:absolute top-14 sm:top-full sm:mt-2 left-2 right-2 sm:left-auto sm:right-0 sm:w-56 bg-white dark:bg-gray-900 rounded-xl shadow-xl border border-gray-100 dark:border-white/10 overflow-hidden z-50">
                 <div className="px-4 py-3 border-b border-gray-100 dark:border-white/5">
                   <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
@@ -180,17 +184,17 @@ export default function Header({ onMenuToggle }) {
           </div>
 
           <div ref={cartRef} className="relative">
-            <button onClick={() => setCartOpen(!cartOpen)} className="relative p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
+            <button onClick={() => setCartOpen(!cartOpen)} className="relative p-1.5 sm:p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
               {totalItems > 0 && <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-[9px] font-bold rounded-full flex items-center justify-center">{totalItems}</span>}
             </button>
             {cartOpen && (
-              <div className="absolute top-full mt-2 right-0 w-[calc(100vw-2rem)] max-w-96 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-100 dark:border-white/10 z-50 overflow-hidden">
+              <div className="fixed sm:absolute top-14 sm:top-full sm:mt-2 left-2 right-2 sm:right-0 sm:w-96 max-w-96 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-100 dark:border-white/10 z-50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
                   <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t("cart.shoppingBag", { count: totalItems })}</h3>
                   <button onClick={() => setCartOpen(false)} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
                 </div>
-                <div className="max-h-80 overflow-y-auto">
+                <div className="max-h-[50vh] lg:max-h-80 overflow-y-auto">
                   {items.length === 0 ? (
                     <div className="px-5 py-10 text-center">
                       <svg className="w-10 h-10 mx-auto text-gray-300 dark:text-gray-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" /></svg>
@@ -198,7 +202,7 @@ export default function Header({ onMenuToggle }) {
                     </div>
                   ) : items.map((item) => (
                     <div key={item.cartKey} className="flex gap-4 px-5 py-4 border-b border-gray-50 dark:border-white/5 hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors">
-                      <img src={item.image} alt={item.name} className="w-16 h-20 object-cover rounded-lg" />
+                      <img src={item.image} alt={item.name} className="w-16 h-20 object-cover rounded-lg flex-shrink-0" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{formatPrice(Number(item.price))} {item.selectedSize && `· ${item.selectedSize}`}</p>

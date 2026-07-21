@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLanguage } from "../context/LanguageContext";
 
 const categories = [
@@ -16,6 +16,15 @@ const categories = [
 export default function SideNav({ isOpen, onClose, activeCategory, onCategoryChange }) {
   const [expanded, setExpanded] = useState(null);
   const { t } = useLanguage();
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [isOpen]);
 
   const handleCategoryClick = (catKey) => {
     if (expanded === catKey) {
@@ -136,8 +145,8 @@ export default function SideNav({ isOpen, onClose, activeCategory, onCategoryCha
           </nav>
 
           {/* Bottom links */}
-          <div className="px-8 py-8 border-t border-gray-100 dark:border-white/5">
-            <ul className="space-y-4">
+          <div className="px-8 py-6 sm:py-8 border-t border-gray-100 dark:border-white/5">
+            <ul className="space-y-1">
               {[
                 { key: "storeLocator", label: t("nav.storeLocator") },
                 { key: "help", label: t("nav.help") },
@@ -146,7 +155,7 @@ export default function SideNav({ isOpen, onClose, activeCategory, onCategoryCha
                 <li key={link.key}>
                   <button
                     onClick={onClose}
-                    className="text-[11px] font-medium uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer text-left"
+                    className="text-[11px] font-medium uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer text-left py-2 block w-full"
                   >
                     {link.label}
                   </button>
