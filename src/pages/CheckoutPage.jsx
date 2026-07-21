@@ -12,10 +12,7 @@ export default function CheckoutPage() {
   const [orderPlaced, setOrderPlaced] = useState(false);
   const [orderId, setOrderId] = useState(null);
   const [errors, setErrors] = useState({});
-  const [form, setForm] = useState({
-    firstName: "", lastName: "", email: "",
-    street: "", city: "", zip: "", phone: "",
-  });
+  const [form, setForm] = useState({ name: "", email: "", phone: "" });
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,13 +21,9 @@ export default function CheckoutPage() {
 
   const validate = () => {
     const errs = {};
-    if (!form.firstName.trim()) errs.firstName = "First name is required";
-    if (!form.lastName.trim()) errs.lastName = "Last name is required";
+    if (!form.name.trim()) errs.name = "Full name is required";
     if (!form.email) errs.email = "Email is required";
     else if (!/^\S+@\S+\.\S+$/.test(form.email)) errs.email = "Invalid email format";
-    if (!form.street.trim()) errs.street = "Address is required";
-    if (!form.city.trim()) errs.city = "City is required";
-    if (!form.zip.trim()) errs.zip = "ZIP code is required";
     if (!form.phone.trim()) errs.phone = "Phone number is required";
     return errs;
   };
@@ -45,12 +38,9 @@ export default function CheckoutPage() {
     try {
       const orderItems = items.map((i) => ({ productId: i.id, quantity: i.quantity, size: i.selectedSize, color: i.selectedColor }));
       const shippingAddress = {
-        firstName: form.firstName.trim(),
-        lastName: form.lastName.trim(),
+        firstName: form.name.trim().split(" ")[0] || form.name.trim(),
+        lastName: form.name.trim().split(" ").slice(1).join(" ") || "",
         email: form.email,
-        street: form.street.trim(),
-        city: form.city.trim(),
-        zip: form.zip.trim(),
         phone: form.phone.trim(),
       };
       const res = await api.orders.create(orderItems, shippingAddress);
@@ -106,45 +96,23 @@ export default function CheckoutPage() {
         <h1 className="text-xl md:text-2xl font-light text-gray-900 dark:text-white tracking-wide mb-6 md:mb-10">Checkout</h1>
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8 lg:gap-12">
           <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-6">
-            <h2 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Shipping Information</h2>
+            <h2 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider">Contact Information</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">First Name</label>
-                <input id="firstName" name="firstName" value={form.firstName} onChange={handleChange} className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.firstName ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
-                {errors.firstName && <p className="text-xs text-red-500 mt-1">{errors.firstName}</p>}
+                <label htmlFor="name" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Full Name</label>
+                <input id="name" name="name" value={form.name} onChange={handleChange} placeholder="John Doe" className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.name ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
+                {errors.name && <p className="text-xs text-red-500 mt-1">{errors.name}</p>}
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Last Name</label>
-                <input id="lastName" name="lastName" value={form.lastName} onChange={handleChange} className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.lastName ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
-                {errors.lastName && <p className="text-xs text-red-500 mt-1">{errors.lastName}</p>}
+                <label htmlFor="phone" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Phone</label>
+                <input id="phone" name="phone" value={form.phone} onChange={handleChange} placeholder="+1 234 567 890" className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.phone ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
+                {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
               </div>
             </div>
             <div>
               <label htmlFor="email" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
-              <input id="email" name="email" type="email" value={form.email} onChange={handleChange} className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.email ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
+              <input id="email" name="email" type="email" value={form.email} onChange={handleChange} placeholder="john@example.com" className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.email ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
               {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
-            </div>
-            <div>
-              <label htmlFor="street" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Address</label>
-              <input id="street" name="street" value={form.street} onChange={handleChange} className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.street ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
-              {errors.street && <p className="text-xs text-red-500 mt-1">{errors.street}</p>}
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div>
-                <label htmlFor="city" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">City</label>
-                <input id="city" name="city" value={form.city} onChange={handleChange} className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.city ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
-                {errors.city && <p className="text-xs text-red-500 mt-1">{errors.city}</p>}
-              </div>
-              <div>
-                <label htmlFor="zip" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">ZIP Code</label>
-                <input id="zip" name="zip" value={form.zip} onChange={handleChange} className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.zip ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
-                {errors.zip && <p className="text-xs text-red-500 mt-1">{errors.zip}</p>}
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Phone</label>
-                <input id="phone" name="phone" value={form.phone} onChange={handleChange} className={`w-full px-4 py-3 text-sm border bg-white dark:bg-white/5 text-gray-900 dark:text-white rounded-sm focus:outline-none focus:ring-1 transition-all ${errors.phone ? "border-red-400 focus:ring-red-500" : "border-gray-200 dark:border-white/10 focus:border-gray-400 dark:focus:border-white/30 focus:ring-gray-100 dark:focus:ring-white/10"}`} />
-                {errors.phone && <p className="text-xs text-red-500 mt-1">{errors.phone}</p>}
-              </div>
             </div>
 
             <div className="pt-4">
