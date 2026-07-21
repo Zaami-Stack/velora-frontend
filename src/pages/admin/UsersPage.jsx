@@ -125,7 +125,7 @@ export default function UsersPage() {
                   <td className="px-6 py-3.5 text-sm text-white font-medium">{u.order_count}</td>
                   <td className="px-6 py-3.5 text-sm font-semibold text-white">${Number(u.total_spent).toFixed(2)}</td>
                   <td className="px-6 py-3.5">
-                    {Number(u.is_admin) === 1 ? (
+                    {Number(u.isAdmin || u.is_admin) === 1 ? (
                       <span className="inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/10 text-white ring-1 ring-white/20">Admin</span>
                     ) : (
                       <span className="inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/5 text-gray-400">Client</span>
@@ -150,7 +150,7 @@ export default function UsersPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-medium text-white truncate">{u.name}</p>
-                    {Number(u.is_admin) === 1 && (
+                    {Number(u.isAdmin || u.is_admin) === 1 && (
                       <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold bg-white/10 text-white ring-1 ring-white/20 ml-2 shrink-0">Admin</span>
                     )}
                   </div>
