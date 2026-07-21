@@ -27,6 +27,13 @@ const UsersPage = lazy(() => import("./pages/admin/UsersPage"));
 const ProductsPage = lazy(() => import("./pages/admin/ProductsPage"));
 const BannersPage = lazy(() => import("./pages/admin/BannersPage"));
 const CategoriesPage = lazy(() => import("./pages/admin/CategoriesPage"));
+const CouponsPage = lazy(() => import("./pages/admin/CouponsPage"));
+const ReviewsPage = lazy(() => import("./pages/admin/ReviewsPage"));
+const StockPage = lazy(() => import("./pages/admin/StockPage"));
+const PagesPage = lazy(() => import("./pages/admin/PagesPage"));
+const TrackOrderPage = lazy(() => import("./pages/TrackOrderPage"));
+const AboutPage = lazy(() => import("./pages/AboutPage"));
+const ContactPage = lazy(() => import("./pages/ContactPage"));
 
 function LoadingSpinner() {
   return (
@@ -56,6 +63,9 @@ function App() {
                       <Route path="/wishlist" element={<WishlistPage />} />
                       <Route path="/bag" element={<CartPage />} />
                       <Route path="/checkout" element={<CheckoutPage />} />
+                      <Route path="/track" element={<TrackOrderPage />} />
+                      <Route path="/about" element={<AboutPage />} />
+                      <Route path="/contact" element={<ContactPage />} />
                       <Route path="/account" element={
                         <ProtectedRoute><AccountPage /></ProtectedRoute>
                       } />
@@ -68,6 +78,10 @@ function App() {
                         <Route path="products" element={<ProductsPage />} />
                         <Route path="banners" element={<BannersPage />} />
                         <Route path="categories" element={<CategoriesPage />} />
+                        <Route path="coupons" element={<CouponsPage />} />
+                        <Route path="reviews" element={<ReviewsPage />} />
+                        <Route path="stock" element={<StockPage />} />
+                        <Route path="pages" element={<PagesPage />} />
                       </Route>
                       <Route path="*" element={<NotFoundPage />} />
                     </Routes>

@@ -16,6 +16,10 @@ export default function CheckoutPage() {
   const [orderId, setOrderId] = useState(null);
   const [errors, setErrors] = useState({});
   const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -30,6 +34,31 @@ export default function CheckoutPage() {
     if (!form.phone.trim()) errs.phone = t("checkout.phoneRequired");
     return errs;
   };
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    setCouponError("");
+    try {
+      const res = await api.products.validateCoupon(couponCode.trim(), totalPrice);
+      setAppliedCoupon(res);
+      toast.success(t("checkout.couponApplied"));
+    } catch (err) {
+      setCouponError(err.message || t("checkout.couponInvalid"));
+      setAppliedCoupon(null);
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponCode("");
+    setCouponError("");
+  };
+
+  const discount = appliedCoupon ? appliedCoupon.discount : 0;
+  const grandTotal = Math.max(0, totalPrice + totalDelivery - discount);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +75,7 @@ export default function CheckoutPage() {
         email: form.email,
         phone: form.phone.trim(),
       };
-      const res = await api.orders.create(orderItems, shippingAddress);
+      const res = await api.orders.create(orderItems, shippingAddress, appliedCoupon?.code || null);
       setOrderId(res.id);
       clearCart();
       setOrderPlaced(true);
@@ -142,7 +171,7 @@ export default function CheckoutPage() {
 
           <div className="lg:col-span-1">
             <div className="bg-gray-50 dark:bg-white/5 rounded-sm p-6 sticky top-24">
-              <h2 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-6">{t("checkout.summary")}</h2>
+              <h2 className="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wider mb-4">{t("checkout.summary")}</h2>
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span>{t("checkout.subtotalItems", { count: totalItems })}</span>
@@ -158,10 +187,32 @@ export default function CheckoutPage() {
                   <span>{t("common.shipping")}</span>
                   <span className="font-medium text-gray-900 dark:text-white">{totalDelivery === 0 ? t("common.free") : formatPrice(totalDelivery)}</span>
                 </div>
+                {appliedCoupon && (
+                  <div className="flex justify-between text-green-600 dark:text-green-400">
+                    <span>{t("checkout.discount")} ({appliedCoupon.code})</span>
+                    <span className="font-medium">-{formatPrice(discount)}</span>
+                  </div>
+                )}
                 <div className="border-t border-gray-200 dark:border-white/10 pt-3 flex justify-between">
                   <span className="text-sm font-semibold text-gray-900 dark:text-white">{t("common.total")}</span>
-                  <span className="text-sm font-bold text-gray-900 dark:text-white">{formatPrice(totalPrice + totalDelivery)}</span>
+                  <span className="text-sm font-bold text-gray-900 dark:text-white">{formatPrice(grandTotal)}</span>
                 </div>
+              </div>
+              <div className="mt-4 pt-4 border-t border-gray-200 dark:border-white/10">
+                {appliedCoupon ? (
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs text-green-600 dark:text-green-400">{appliedCoupon.code}</span>
+                    <button type="button" onClick={handleRemoveCoupon} className="text-xs text-gray-400 hover:text-white cursor-pointer">{t("common.remove")}</button>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="flex gap-2">
+                      <input type="text" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} placeholder={t("checkout.couponCode")} className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-white/20" />
+                      <button type="button" onClick={handleApplyCoupon} disabled={couponLoading} className="px-3 py-2 bg-white/10 text-white text-xs font-medium rounded-lg hover:bg-white/15 transition-colors cursor-pointer disabled:opacity-50">{couponLoading ? "..." : t("checkout.applyCoupon")}</button>
+                    </div>
+                    {couponError && <p className="text-xs text-red-500 mt-1">{couponError}</p>}
+                  </div>
+                )}
               </div>
             </div>
           </div>

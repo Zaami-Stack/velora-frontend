@@ -8,6 +8,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { formatPrice } from "../utils/currency";
 import ProductCard from "../components/ProductCard";
 import Layout from "../components/Layout";
+import SizeGuide from "../components/SizeGuide";
 
 const sizes = ["XS", "S", "M", "L", "XL"];
 
@@ -23,6 +24,11 @@ export default function ProductDetailPage() {
   const [selectedSize, setSelectedSize] = useState("");
   const [selectedColor, setSelectedColor] = useState(0);
   const [quantity, setQuantity] = useState(1);
+  const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [reviewForm, setReviewForm] = useState({ name: "", email: "", rating: 5, title: "", comment: "" });
+  const [reviewSubmitting, setReviewSubmitting] = useState(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -35,6 +41,10 @@ export default function ProductDetailPage() {
           if (p.colors && p.colors.length > 0) setSelectedColor(0);
           const res = await api.products.list({ category: p.category });
           if (!cancelled) setRelated(res.products.filter((r) => r.id !== p.id).slice(0, 4));
+          try {
+            const revs = await api.products.reviews(id);
+            if (!cancelled) setReviews(revs);
+          } catch {}
         }
       } catch {
         if (!cancelled) setProduct(null);
@@ -58,6 +68,22 @@ export default function ProductDetailPage() {
   const handleWishlist = () => {
     toggle(product);
     toast[liked ? "info" : "success"](liked ? t("product.removedFromWishlist") : t("product.addedToWishlist"));
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    if (!reviewForm.name.trim()) return;
+    setReviewSubmitting(true);
+    try {
+      await api.products.submitReview(product.id, reviewForm);
+      setReviewSubmitted(true);
+      setReviewForm({ name: "", email: "", rating: 5, title: "", comment: "" });
+      toast.success(t("reviewForm.submitted"));
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      setReviewSubmitting(false);
+    }
   };
 
   if (loading) {
@@ -153,8 +179,11 @@ export default function ProductDetailPage() {
               </div>
             )}
 
-            <div className="mb-6">
-              <p className="text-xs font-medium text-gray-900 dark:text-white uppercase tracking-wider mb-3">{t("product.size")}</p>
+              <div className="mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <p className="text-xs font-medium text-gray-900 dark:text-white uppercase tracking-wider">{t("product.size")}</p>
+                <button type="button" onClick={() => setSizeGuideOpen(true)} className="text-xs text-gray-400 dark:text-gray-500 underline underline-offset-2 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer">{t("sizeGuide.title")}</button>
+              </div>
               <div className="flex flex-wrap gap-2">
                 {sizes.map((size) => (
                   <button key={size} onClick={() => setSelectedSize(size)}
@@ -193,7 +222,52 @@ export default function ProductDetailPage() {
             </div>
           </div>
         )}
+
+        <div className="mt-12 md:mt-20">
+          <h2 className="text-base md:text-lg font-light text-gray-900 dark:text-white tracking-wide mb-6 md:mb-8">{t("product.reviews", { count: reviews.length })}</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div>
+              {reviews.length === 0 ? (
+                <p className="text-sm text-gray-400 dark:text-gray-500">{t("reviewForm.noReviews")}</p>
+              ) : (
+                <div className="space-y-4">
+                  {reviews.map((rev) => (
+                    <div key={rev.id} className="p-4 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/5">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex">{[1,2,3,4,5].map(s => <svg key={s} className={`w-3 h-3 ${s <= rev.rating ? "text-amber-400" : "text-gray-200 dark:text-gray-700"}`} fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>)}</div>
+                        <span className="text-xs text-gray-400 dark:text-gray-500">{rev.customerName}</span>
+                      </div>
+                      {rev.title && <p className="text-sm font-medium text-gray-900 dark:text-white mb-1">{rev.title}</p>}
+                      {rev.comment && <p className="text-sm text-gray-600 dark:text-gray-400">{rev.comment}</p>}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <div>
+              {reviewSubmitted ? (
+                <div className="p-6 bg-green-50 dark:bg-green-500/10 rounded-lg border border-green-200 dark:border-green-500/20">
+                  <p className="text-sm text-green-700 dark:text-green-400">{t("reviewForm.submitted")}</p>
+                </div>
+              ) : (
+                <form onSubmit={handleReviewSubmit} className="space-y-4">
+                  <h3 className="text-sm font-medium text-gray-900 dark:text-white">{t("reviewForm.title")}</h3>
+                  <input type="text" value={reviewForm.name} onChange={(e) => setReviewForm({...reviewForm, name: e.target.value})} placeholder={t("reviewForm.name")} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" required />
+                  <input type="email" value={reviewForm.email} onChange={(e) => setReviewForm({...reviewForm, email: e.target.value})} placeholder={t("reviewForm.emailField")} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" />
+                  <div>
+                    <p className="text-xs font-medium text-gray-400 mb-2">{t("reviewForm.rating")}</p>
+                    <div className="flex gap-1">{[1,2,3,4,5].map(s => <button key={s} type="button" onClick={() => setReviewForm({...reviewForm, rating: s})} className="cursor-pointer"><svg className={`w-6 h-6 ${s <= reviewForm.rating ? "text-amber-400" : "text-gray-200 dark:text-gray-700"}`} fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg></button>)}</div>
+                  </div>
+                  <input type="text" value={reviewForm.title} onChange={(e) => setReviewForm({...reviewForm, title: e.target.value})} placeholder={t("reviewForm.titlePlaceholder")} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" />
+                  <textarea rows={3} value={reviewForm.comment} onChange={(e) => setReviewForm({...reviewForm, comment: e.target.value})} placeholder={t("reviewForm.commentPlaceholder")} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20 resize-none" />
+                  <button type="submit" disabled={reviewSubmitting || !reviewForm.name.trim()} className="px-5 py-2.5 bg-white text-gray-950 text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50">{reviewSubmitting ? "..." : t("reviewForm.submit")}</button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
+      <SizeGuide isOpen={sizeGuideOpen} onClose={() => setSizeGuideOpen(false)} />
     </Layout>
   );
 }

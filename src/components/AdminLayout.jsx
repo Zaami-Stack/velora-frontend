@@ -15,6 +15,10 @@ export default function AdminLayout() {
     { path: "/admin/products", label: t("admin.products") },
     { path: "/admin/banners", label: t("admin.banners") },
     { path: "/admin/categories", label: t("admin.categories") },
+    { path: "/admin/coupons", label: t("admin.coupons") },
+    { path: "/admin/reviews", label: t("admin.reviews") },
+    { path: "/admin/stock", label: t("admin.stock") },
+    { path: "/admin/pages", label: t("admin.pages") },
     { path: "/admin/users", label: t("admin.users") },
   ];
 

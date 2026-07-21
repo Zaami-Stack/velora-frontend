@@ -23,6 +23,7 @@ const emptyForm = {
   reviews: "0",
   description: "",
   colors: [],
+  stock: "",
 };
 
 export default function ProductsPage() {
@@ -82,6 +83,7 @@ export default function ProductsPage() {
       colors: (p.colors || []).map((c) =>
         typeof c === "string" ? { hex: c, image: "" } : { hex: c.hex, image: c.image || "" }
       ),
+      stock: p.stock != null ? String(p.stock) : "",
     });
     setColorInput("");
     setColorImageInput("");
@@ -131,6 +133,7 @@ export default function ProductsPage() {
         reviews: Number(form.reviews) || 0,
         description: form.description || null,
         colors: form.colors,
+        stock: form.stock !== "" ? Number(form.stock) : null,
       };
 
       if (modal?.type === "edit") {
@@ -301,6 +304,10 @@ export default function ProductsPage() {
               <div>
                 <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.description")}</label>
                 <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20 resize-none" placeholder={t("productsPage.descriptionPlaceholder")} />
+              </div>
+              <div>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.stock")}</label>
+                <input type="number" min="0" value={form.stock} onChange={(e) => setForm({ ...form, stock: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder={t("stockPage.unlimited")} />
               </div>
               <div>
                 <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.colors")}</label>
