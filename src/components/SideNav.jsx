@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLanguage } from "../context/LanguageContext";
 
 const categories = [
-  { key: "newIn", sub: ["maxiDresses", "miniDresses", "midiDresses", "slipDresses", "tops", "pants"] },
+  { key: "newIn", sub: ["maxiDresses", "miniDresses", "midiDresses", "slipDresses", "blouses", "tailored"] },
   { key: "dresses", sub: ["maxiDresses", "miniDresses", "midiDresses", "slipDresses"] },
   { key: "tops", sub: ["blouses", "tShirts", "cropTops", "bodysuits"] },
   { key: "pants", sub: ["tailored", "wideLeg", "skinny", "cargo"] },

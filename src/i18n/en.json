@@ -105,6 +105,7 @@
   },
   "categories": {
     "all": "All",
+    "newIn": "New In",
     "dresses": "Dresses",
     "tops": "Tops",
     "pants": "Pants",
@@ -182,6 +183,7 @@
     "mastercard": "Mastercard",
     "amex": "Amex",
     "paypal": "PayPal",
+    "payPal": "PayPal",
     "rights": "© 2026 Velora. All rights reserved.",
     "copyright": "© 2026 Velora. All rights reserved."
   },
@@ -701,7 +703,13 @@
     "ctaTitle": "Discover Our Collection",
     "ctaSubtitle": "Explore the latest in luxury fashion",
     "ctaText": "Shop Now",
-    "shopNow": "Shop Now"
+    "shopNow": "Shop Now",
+    "value0Title": "Timeless Design",
+    "value0Text": "Classic elegance that transcends seasons",
+    "value1Title": "Premium Quality",
+    "value1Text": "Only the finest materials and craftsmanship",
+    "value2Title": "Sustainable Practices",
+    "value2Text": "Fashion with respect for our planet"
   },
   "contactPage": {
     "title": "Contact Us",
@@ -713,8 +721,11 @@
     "formTitle": "Send a Message",
     "email": "Email",
     "phone": "Phone",
+    "phoneLabel": "Phone",
     "address": "Address",
+    "addressLabel": "Address",
     "hours": "Business Hours",
+    "hoursLabel": "Business Hours",
     "sendMessage": "Send us a Message",
     "name": "Your Name",
     "nameLabel": "Your Name",
@@ -752,6 +763,7 @@
     "title": "Write a Review",
     "name": "Your Name",
     "email": "Email (optional)",
+    "emailField": "Your Email (optional)",
     "rating": "Rating",
     "reviewTitle": "Review Title",
     "titlePlaceholder": "e.g., Great quality!",
