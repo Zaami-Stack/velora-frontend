@@ -130,7 +130,7 @@ export default function OrdersPage() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-white">{order.id}</p>
-                  <p className="text-xs text-gray-500 mt-0.5 truncate max-w-[150px] sm:max-w-none">{order.customer_name} &middot; <span className="hidden sm:inline">{order.customer_email}</span><span className="sm:hidden">{order.customer_email?.split("@")[0]}</span></p>
+                  <p className="text-xs text-gray-500 mt-0.5 truncate max-w-[150px] sm:max-w-none">{order.customer_name} &middot; <span className="hidden sm:inline">{order.customer_email}</span><span className="sm:hidden">{order.customer_email?.split("@")[0]}</span>{order.customer_phone && <span className="hidden sm:inline"> &middot; {order.customer_phone}</span>}</p>
                 </div>
                 <p className="text-xs text-gray-500 hidden sm:block">{new Date(order.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
                 <p className="text-sm font-bold text-white">${Number(order.total).toFixed(2)}</p>
@@ -182,14 +182,11 @@ export default function OrdersPage() {
                       </div>
                       {order.shipping_address && Object.keys(order.shipping_address).length > 0 && (
                         <div>
-                          <h4 className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Shipping Address</h4>
+                          <h4 className="text-[11px] font-semibold text-gray-500 uppercase tracking-wider mb-2">Customer Info</h4>
                           <div className="p-3 rounded-xl bg-white/[0.02] text-sm text-gray-300 space-y-0.5">
-                            {order.shipping_address.firstName && <p>{order.shipping_address.firstName} {order.shipping_address.lastName}</p>}
-                            {order.shipping_address.street && <p>{order.shipping_address.street}</p>}
-                            <p>
-                              {[order.shipping_address.city, order.shipping_address.state, order.shipping_address.zip].filter(Boolean).join(", ")}
-                            </p>
-                            {order.shipping_address.email && <p className="text-gray-500">{order.shipping_address.email}</p>}
+                            {order.customer_name && <p className="text-white font-medium">{order.customer_name}</p>}
+                            {order.customer_email && <p className="text-gray-400">{order.customer_email}</p>}
+                            {order.customer_phone && <p className="text-gray-400">{order.customer_phone}</p>}
                           </div>
                         </div>
                       )}
