@@ -40,6 +40,15 @@ const navItems = [
       </svg>
     ),
   },
+  {
+    key: "banners",
+    path: "/admin/banners",
+    icon: (
+      <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6h16.5M3.75 12h16.5m-16.5 6h16.5M3.75 6v12M6 6v12m12-12v12" />
+      </svg>
+    ),
+  },
 ];
 
 export default function AdminSidebar({ isOpen, onClose }) {
@@ -52,6 +61,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
     orders: t("admin.orders"),
     customers: t("admin.customers"),
     products: t("admin.products"),
+    banners: t("admin.banners"),
   };
 
   const isActive = (path) => {

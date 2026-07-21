@@ -50,6 +50,7 @@ export default function HomePage() {
   const [error, setError] = useState(null);
   const [subscribed, setSubscribed] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [bannerSlides, setBannerSlides] = useState([]);
   const toast = useToast();
   const navigate = useNavigate();
   const { t } = useLanguage();
@@ -59,6 +60,27 @@ export default function HomePage() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchBanners() {
+      try {
+        const data = await api.products.banners();
+        if (!cancelled && data.length > 0) {
+          setBannerSlides(data.map((b) => ({
+            image: b.image,
+            badge: b.badge || "",
+            title: b.title,
+            subtitle: b.subtitle || "",
+            buttonText: b.buttonText || t("hero.shopNow"),
+            buttonLink: b.buttonLink || "#products",
+          })));
+        }
+      } catch { /* use fallback */ }
+    }
+    fetchBanners();
+    return () => { cancelled = true; };
+  }, [t]);
 
   useEffect(() => {
     let cancelled = false;
@@ -90,7 +112,7 @@ export default function HomePage() {
   const heroProduct = products.find((p) => p.badge === "New") || products[0];
   const gridProducts = products.filter((p) => p.id !== heroProduct?.id);
 
-  const carouselSlides = [
+  const fallbackSlides = [
     {
       image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1400&h=420&fit=crop",
       badge: t("hero.summer2026"),
@@ -116,6 +138,8 @@ export default function HomePage() {
       buttonLink: "#products",
     },
   ];
+
+  const carouselSlides = bannerSlides.length > 0 ? bannerSlides : fallbackSlides;
 
   const marqueeItems = [
     t("marquee.freeShipping"),

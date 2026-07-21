@@ -46,6 +46,7 @@ export const api = {
     },
     get: (id) => request(`/products/${id}`),
     categories: () => request("/products/categories"),
+    banners: () => request("/products/banners"),
   },
   orders: {
     create: (items, shippingAddress) => request("/orders", { method: "POST", body: JSON.stringify({ items, shippingAddress }) }),
@@ -62,5 +63,9 @@ export const api = {
     createProduct: (data) => request("/admin/products", { method: "POST", body: JSON.stringify(data) }),
     updateProduct: (id, data) => request(`/admin/products/${id}`, { method: "PUT", body: JSON.stringify(data) }),
     deleteProduct: (id) => request(`/admin/products/${id}`, { method: "DELETE" }),
+    banners: () => request("/admin/banners"),
+    createBanner: (data) => request("/admin/banners", { method: "POST", body: JSON.stringify(data) }),
+    updateBanner: (id, data) => request(`/admin/banners/${id}`, { method: "PUT", body: JSON.stringify(data) }),
+    deleteBanner: (id) => request(`/admin/banners/${id}`, { method: "DELETE" }),
   },
 };

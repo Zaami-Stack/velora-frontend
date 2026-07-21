@@ -13,6 +13,7 @@ export default function AdminLayout() {
     { path: "/admin", label: t("admin.overview") },
     { path: "/admin/orders", label: t("admin.orders") },
     { path: "/admin/products", label: t("admin.products") },
+    { path: "/admin/banners", label: t("admin.banners") },
     { path: "/admin/users", label: t("admin.users") },
   ];
 

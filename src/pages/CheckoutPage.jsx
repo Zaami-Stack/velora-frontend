@@ -7,7 +7,7 @@ import { api } from "../api";
 import Layout from "../components/Layout";
 
 export default function CheckoutPage() {
-  const { items, totalItems, totalPrice, totalSavings, clearCart } = useCart();
+  const { items, totalItems, totalPrice, totalSavings, totalDelivery, clearCart } = useCart();
   const toast = useToast();
   const { t } = useLanguage();
   const [loading, setLoading] = useState(false);
@@ -90,8 +90,6 @@ export default function CheckoutPage() {
     );
   }
 
-  const shipping = totalPrice >= 50 ? 0 : 9.99;
-
   return (
     <Layout hideSideNav>
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
@@ -157,11 +155,11 @@ export default function CheckoutPage() {
                 )}
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span>{t("common.shipping")}</span>
-                  <span className="font-medium text-gray-900 dark:text-white">{shipping === 0 ? t("common.free") : `$${shipping}`}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{totalDelivery === 0 ? t("common.free") : `$${totalDelivery.toFixed(2)}`}</span>
                 </div>
                 <div className="border-t border-gray-200 dark:border-white/10 pt-3 flex justify-between">
                   <span className="text-sm font-semibold text-gray-900 dark:text-white">{t("common.total")}</span>
-                  <span className="text-sm font-bold text-gray-900 dark:text-white">${(totalPrice + shipping).toFixed(2)}</span>
+                  <span className="text-sm font-bold text-gray-900 dark:text-white">${(totalPrice + totalDelivery).toFixed(2)}</span>
                 </div>
               </div>
             </div>

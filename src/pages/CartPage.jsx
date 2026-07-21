@@ -4,7 +4,7 @@ import { useLanguage } from "../context/LanguageContext";
 import Layout from "../components/Layout";
 
 export default function CartPage() {
-  const { items, removeItem, updateQuantity, totalItems, totalPrice, totalSavings } = useCart();
+  const { items, removeItem, updateQuantity, totalItems, totalPrice, totalSavings, totalDelivery } = useCart();
   const { t } = useLanguage();
 
   return (
@@ -76,11 +76,11 @@ export default function CartPage() {
                   )}
                   <div className="flex justify-between text-gray-600 dark:text-gray-400">
                     <span>{t("common.shipping")}</span>
-                    <span className="font-medium text-gray-900 dark:text-white">{totalPrice >= 50 ? t("common.free") : "$9.99"}</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{totalDelivery === 0 ? t("common.free") : `$${totalDelivery.toFixed(2)}`}</span>
                   </div>
                   <div className="border-t border-gray-200 dark:border-white/10 pt-3 flex justify-between">
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">{t("common.total")}</span>
-                    <span className="text-sm font-bold text-gray-900 dark:text-white">${(totalPrice + (totalPrice >= 50 ? 0 : 9.99)).toFixed(2)}</span>
+                    <span className="text-sm font-bold text-gray-900 dark:text-white">${(totalPrice + totalDelivery).toFixed(2)}</span>
                   </div>
                 </div>
                 <Link to="/checkout" className="block w-full py-3.5 mt-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium tracking-wide text-center rounded-sm hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">

@@ -355,6 +355,7 @@
     "orders": "Orders",
     "customers": "Customers",
     "products": "Products",
+    "banners": "Banners",
     "users": "Users"
   },
   "dashboard": {
@@ -449,6 +450,43 @@
     "productCreated": "Product created",
     "productDeleted": "Product deleted",
     "badgeNew": "New",
-    "badgeSale": "Sale"
+    "badgeSale": "Sale",
+    "deliveryPrice": "Delivery Price",
+    "deliveryPricePlaceholder": "0.00"
+  },
+  "bannersPage": {
+    "heading": "Banners",
+    "description": "Manage your homepage carousel banners",
+    "bannerCount": "{{count}} banners",
+    "addBanner": "Add Banner",
+    "editBanner": "Edit Banner",
+    "addBannerHeading": "Add Banner",
+    "title": "Title *",
+    "titlePlaceholder": "Banner title",
+    "subtitle": "Subtitle",
+    "subtitlePlaceholder": "Optional subtitle",
+    "badge": "Badge",
+    "badgePlaceholder": "e.g. Summer 2026",
+    "buttonText": "Button Text",
+    "buttonTextPlaceholder": "Shop Now",
+    "buttonLink": "Button Link",
+    "buttonLinkPlaceholder": "#products",
+    "imageUrl": "Image URL *",
+    "imagePlaceholder": "https://...",
+    "preview": "Preview",
+    "sortOrder": "Sort Order",
+    "active": "Active",
+    "inactive": "Inactive",
+    "createBanner": "Create Banner",
+    "updateBanner": "Update Banner",
+    "deleteBanner": "Delete Banner",
+    "deleteConfirm": "Are you sure you want to delete this banner?",
+    "deleteWarning": "This cannot be undone",
+    "requiredFields": "Title and image URL are required",
+    "bannerCreated": "Banner created",
+    "bannerUpdated": "Banner updated",
+    "bannerDeleted": "Banner deleted",
+    "noBanners": "No banners yet",
+    "noBannersDesc": "Add a banner to display on the homepage carousel"
   }
 }

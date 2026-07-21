@@ -15,6 +15,7 @@ const emptyForm = {
   category: "Dresses",
   price: "",
   originalPrice: "",
+  deliveryPrice: "",
   image: "",
   badge: "",
   rating: "4.5",
@@ -71,6 +72,7 @@ export default function ProductsPage() {
       category: p.category,
       price: String(p.price),
       originalPrice: p.originalPrice ? String(p.originalPrice) : "",
+      deliveryPrice: p.deliveryPrice != null ? String(p.deliveryPrice) : "",
       image: p.image,
       badge: p.badge || "",
       rating: String(p.rating),
@@ -121,6 +123,7 @@ export default function ProductsPage() {
         category: form.category,
         price: Number(form.price),
         originalPrice: form.originalPrice ? Number(form.originalPrice) : null,
+        deliveryPrice: form.deliveryPrice ? Number(form.deliveryPrice) : 0,
         image: form.image,
         badge: form.badge || null,
         rating: Number(form.rating) || 0,
@@ -265,7 +268,7 @@ export default function ProductsPage() {
                   </select>
                 </div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.price")}</label>
                   <input type="number" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder={t("productsPage.pricePlaceholder")} />
@@ -273,6 +276,10 @@ export default function ProductsPage() {
                 <div>
                   <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.originalPrice")}</label>
                   <input type="number" step="0.01" value={form.originalPrice} onChange={(e) => setForm({ ...form, originalPrice: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder={t("productsPage.originalPricePlaceholder")} />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.deliveryPrice")}</label>
+                  <input type="number" step="0.01" min="0" value={form.deliveryPrice} onChange={(e) => setForm({ ...form, deliveryPrice: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder="0.00" />
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

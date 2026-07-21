@@ -58,13 +58,14 @@ export function CartProvider({ children }) {
   const totalItems = state.items.reduce((sum, i) => sum + i.quantity, 0);
   const totalPrice = state.items.reduce((sum, i) => sum + i.price * i.quantity, 0);
   const totalSavings = state.items.reduce((sum, i) => sum + (i.originalPrice ? (i.originalPrice - i.price) * i.quantity : 0), 0);
+  const totalDelivery = state.items.reduce((sum, i) => sum + (i.deliveryPrice || 0) * i.quantity, 0);
 
   useEffect(() => {
     localStorage.setItem("velora_cart", JSON.stringify(state.items));
   }, [state.items]);
 
   return (
-    <CartContext.Provider value={{ items: state.items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice, totalSavings }}>
+    <CartContext.Provider value={{ items: state.items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice, totalSavings, totalDelivery }}>
       {children}
     </CartContext.Provider>
   );

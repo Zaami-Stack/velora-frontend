@@ -355,6 +355,7 @@
     "orders": "Commandes",
     "customers": "Clients",
     "products": "Produits",
+    "banners": "Bannières",
     "users": "Utilisateurs"
   },
   "dashboard": {
@@ -449,6 +450,43 @@
     "productCreated": "Produit créé",
     "productDeleted": "Produit supprimé",
     "badgeNew": "Nouveau",
-    "badgeSale": "Solde"
+    "badgeSale": "Solde",
+    "deliveryPrice": "Frais de livraison",
+    "deliveryPricePlaceholder": "0,00"
+  },
+  "bannersPage": {
+    "heading": "Bannières",
+    "description": "Gérez les bannières du carrousel de la page d'accueil",
+    "bannerCount": "{{count}} bannières",
+    "addBanner": "Ajouter une bannière",
+    "editBanner": "Modifier la bannière",
+    "addBannerHeading": "Ajouter une bannière",
+    "title": "Titre *",
+    "titlePlaceholder": "Titre de la bannière",
+    "subtitle": "Sous-titre",
+    "subtitlePlaceholder": "Sous-titre optionnel",
+    "badge": "Badge",
+    "badgePlaceholder": "ex. Été 2026",
+    "buttonText": "Texte du bouton",
+    "buttonTextPlaceholder": "Acheter",
+    "buttonLink": "Lien du bouton",
+    "buttonLinkPlaceholder": "#products",
+    "imageUrl": "URL de l'image *",
+    "imagePlaceholder": "https://...",
+    "preview": "Aperçu",
+    "sortOrder": "Ordre d'affichage",
+    "active": "Actif",
+    "inactive": "Inactif",
+    "createBanner": "Créer la bannière",
+    "updateBanner": "Mettre à jour la bannière",
+    "deleteBanner": "Supprimer la bannière",
+    "deleteConfirm": "Êtes-vous sûr de vouloir supprimer cette bannière ?",
+    "deleteWarning": "Cette action est irréversible",
+    "requiredFields": "Le titre et l'URL de l'image sont requis",
+    "bannerCreated": "Bannière créée",
+    "bannerUpdated": "Bannière mise à jour",
+    "bannerDeleted": "Bannière supprimée",
+    "noBanners": "Aucune bannière",
+    "noBannersDesc": "Ajoutez une bannière pour l'afficher sur le carrousel de la page d'accueil"
   }
 }
