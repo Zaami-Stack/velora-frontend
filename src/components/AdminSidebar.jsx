@@ -1,10 +1,11 @@
 import { Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useLanguage } from "../context/LanguageContext";
 import Logo from "./Logo";
 
 const navItems = [
   {
-    label: "Overview",
+    key: "overview",
     path: "/admin",
     icon: (
       <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -13,7 +14,7 @@ const navItems = [
     ),
   },
   {
-    label: "Orders",
+    key: "orders",
     path: "/admin/orders",
     icon: (
       <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -22,7 +23,7 @@ const navItems = [
     ),
   },
   {
-    label: "Customers",
+    key: "customers",
     path: "/admin/users",
     icon: (
       <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -31,7 +32,7 @@ const navItems = [
     ),
   },
   {
-    label: "Products",
+    key: "products",
     path: "/admin/products",
     icon: (
       <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
@@ -44,6 +45,14 @@ const navItems = [
 export default function AdminSidebar({ isOpen, onClose }) {
   const location = useLocation();
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
+
+  const navLabels = {
+    overview: t("admin.overview"),
+    orders: t("admin.orders"),
+    customers: t("admin.customers"),
+    products: t("admin.products"),
+  };
 
   const isActive = (path) => {
     if (path === "/admin") return location.pathname === "/admin";
@@ -56,7 +65,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
 
       <aside className={`fixed top-0 left-0 h-full w-[260px] bg-gray-950 z-[60] transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"} lg:static lg:z-auto lg:translate-x-0`}>
         <div className="flex items-center justify-between h-16 px-5 lg:hidden">
-          <span className="text-sm font-semibold text-white">Menu</span>
+          <span className="text-sm font-semibold text-white">{t("nav.menu")}</span>
           <button onClick={onClose} className="p-1 text-gray-400 hover:text-white cursor-pointer">
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -68,7 +77,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
           <div className="px-5 py-6">
             <Link to="/" className="flex items-center gap-2.5">
               <Logo size="sm" className="[&_span]:!text-white [&_svg]:!fill-white [&_svg]:!text-gray-950" />
-              <span className="block text-[9px] font-medium text-gray-500 uppercase tracking-[0.2em] -mt-0.5">Admin Panel</span>
+              <span className="block text-[9px] font-medium text-gray-500 uppercase tracking-[0.2em] -mt-0.5">{t("admin.adminPanel")}</span>
             </Link>
           </div>
 
@@ -85,7 +94,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
                 }`}
               >
                 <span className={isActive(item.path) ? "text-white" : "text-gray-500"}>{item.icon}</span>
-                {item.label}
+                {navLabels[item.key]}
               </Link>
             ))}
           </nav>
@@ -108,7 +117,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
               <svg className="w-[18px] h-[18px] text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 002.25 1.016c.896 0 1.7-.393 2.25-1.016a3.001 3.001 0 003.75.614m-16.5 0a3.004 3.004 0 01-.621-4.72L4.318 3.44A1.5 1.5 0 015.378 3h13.243a1.5 1.5 0 011.06.44l1.19 1.189a3 3 0 01-.621 4.72m-13.5 8.65h3.75a.75.75 0 00.75-.75V13.5a.75.75 0 00-.75-.75H6.75a.75.75 0 00-.75.75v3.75c0 .415.336.75.75.75z" />
               </svg>
-              Back to Store
+              {t("common.backToStore")}
             </Link>
             <button
               onClick={() => { logout(); onClose(); }}
@@ -117,7 +126,7 @@ export default function AdminSidebar({ isOpen, onClose }) {
               <svg className="w-[18px] h-[18px] text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" />
               </svg>
-              Sign Out
+              {t("common.signOut")}
             </button>
           </div>
         </div>

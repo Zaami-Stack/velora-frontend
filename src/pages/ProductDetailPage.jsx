@@ -4,6 +4,7 @@ import { api } from "../api";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useToast } from "../context/ToastContext";
+import { useLanguage } from "../context/LanguageContext";
 import ProductCard from "../components/ProductCard";
 import Layout from "../components/Layout";
 
@@ -14,6 +15,7 @@ export default function ProductDetailPage() {
   const { addItem } = useCart();
   const { toggle, isWishlisted } = useWishlist();
   const toast = useToast();
+  const { t } = useLanguage();
   const [product, setProduct] = useState(null);
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,15 +48,15 @@ export default function ProductDetailPage() {
   const liked = product ? isWishlisted(product.id) : false;
 
   const handleAddToCart = () => {
-    if (!selectedSize) { toast.error("Please select a size"); return; }
+    if (!selectedSize) { toast.error(t("product.selectSize")); return; }
     const colorObj = product.colors?.[selectedColor];
     addItem({ ...product, selectedSize, selectedColor: colorObj?.hex || null, quantity, cartKey: `${product.id}-${selectedSize}-${selectedColor}` });
-    toast.success(`${product.name} added to bag`);
+    toast.success(t("product.addedToBag", { name: product.name }));
   };
 
   const handleWishlist = () => {
     toggle(product);
-    toast[liked ? "info" : "success"](liked ? "Removed from wishlist" : "Added to wishlist");
+    toast[liked ? "info" : "success"](liked ? t("product.removedFromWishlist") : t("product.addedToWishlist"));
   };
 
   if (loading) {
@@ -80,8 +82,8 @@ export default function ProductDetailPage() {
       <Layout hideSideNav>
         <div className="flex items-center justify-center min-h-[60vh]">
           <div className="text-center">
-            <p className="text-gray-400 dark:text-gray-500 text-lg mb-4">Product not found</p>
-            <Link to="/" className="text-sm font-medium text-gray-900 dark:text-white underline underline-offset-4">Back to shop</Link>
+            <p className="text-gray-400 dark:text-gray-500 text-lg mb-4">{t("product.productNotFound")}</p>
+            <Link to="/" className="text-sm font-medium text-gray-900 dark:text-white underline underline-offset-4">{t("product.backToShop")}</Link>
           </div>
         </div>
       </Layout>
@@ -92,7 +94,7 @@ export default function ProductDetailPage() {
     <Layout hideSideNav>
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8">
         <nav className="text-xs text-gray-400 dark:text-gray-500 mb-6 md:mb-8 flex items-center gap-2 overflow-x-auto scrollbar-hide">
-          <Link to="/" className="hover:text-gray-900 dark:hover:text-white transition-colors">Home</Link>
+          <Link to="/" className="hover:text-gray-900 dark:hover:text-white transition-colors">{t("product.home")}</Link>
           <span>/</span>
           <Link to="/" className="hover:text-gray-900 dark:hover:text-white transition-colors">{product.category}</Link>
           <span>/</span>
@@ -128,7 +130,7 @@ export default function ProductDetailPage() {
                     </svg>
                   ))}
                 </div>
-                <span className="text-xs text-gray-400 dark:text-gray-500">{product.reviews} reviews</span>
+                <span className="text-xs text-gray-400 dark:text-gray-500">{t("product.reviews", { count: product.reviews })}</span>
               </div>
             )}
 
@@ -136,7 +138,7 @@ export default function ProductDetailPage() {
 
             {product.colors && product.colors.length > 0 && (
               <div className="mb-6">
-                <p className="text-xs font-medium text-gray-900 dark:text-white uppercase tracking-wider mb-3">Color</p>
+                <p className="text-xs font-medium text-gray-900 dark:text-white uppercase tracking-wider mb-3">{t("product.color")}</p>
                 <div className="flex items-center gap-2">
                   {product.colors.map((color, i) => (
                     <button key={i} onClick={() => setSelectedColor(i)}
@@ -145,13 +147,13 @@ export default function ProductDetailPage() {
                   ))}
                 </div>
                 {product.colors[selectedColor]?.image && product.colors[selectedColor]?.hex && (
-                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-2">Viewing color variant</p>
+                  <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-2">{t("product.viewingColor")}</p>
                 )}
               </div>
             )}
 
             <div className="mb-6">
-              <p className="text-xs font-medium text-gray-900 dark:text-white uppercase tracking-wider mb-3">Size</p>
+              <p className="text-xs font-medium text-gray-900 dark:text-white uppercase tracking-wider mb-3">{t("product.size")}</p>
               <div className="flex flex-wrap gap-2">
                 {sizes.map((size) => (
                   <button key={size} onClick={() => setSelectedSize(size)}
@@ -163,16 +165,16 @@ export default function ProductDetailPage() {
             </div>
 
             <div className="mb-8">
-              <p className="text-xs font-medium text-gray-900 dark:text-white uppercase tracking-wider mb-3">Quantity</p>
+              <p className="text-xs font-medium text-gray-900 dark:text-white uppercase tracking-wider mb-3">{t("product.quantity")}</p>
               <div className="flex items-center gap-3">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 border border-gray-200 dark:border-white/10 rounded-sm flex items-center justify-center text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/30 transition-colors cursor-pointer">-</button>
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 border border-gray-200 dark:border-white/10 rounded-sm flex items-center justify-center text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/30 transition-colors cursor-pointer">{t("common.decrement")}</button>
                 <span className="text-sm font-medium w-8 text-center text-gray-900 dark:text-white">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="w-10 h-10 border border-gray-200 dark:border-white/10 rounded-sm flex items-center justify-center text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/30 transition-colors cursor-pointer">+</button>
+                <button onClick={() => setQuantity(quantity + 1)} className="w-10 h-10 border border-gray-200 dark:border-white/10 rounded-sm flex items-center justify-center text-gray-600 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/30 transition-colors cursor-pointer">{t("common.increment")}</button>
               </div>
             </div>
 
             <div className="flex gap-3 mb-6">
-              <button onClick={handleAddToCart} className="flex-1 py-3.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium tracking-wide hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors cursor-pointer">Add to Bag</button>
+              <button onClick={handleAddToCart} className="flex-1 py-3.5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium tracking-wide hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors cursor-pointer">{t("product.addToBag")}</button>
               <button onClick={handleWishlist} className={`w-12 h-12 border rounded-sm flex items-center justify-center transition-all cursor-pointer ${liked ? "border-rose-200 dark:border-rose-500/30 bg-rose-50 dark:bg-rose-500/10" : "border-gray-200 dark:border-white/10 hover:border-gray-400 dark:hover:border-white/30"}`}>
                 <svg className={`w-5 h-5 ${liked ? "text-rose-500" : "text-gray-600 dark:text-gray-300"}`} fill={liked ? "currentColor" : "none"} viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
@@ -184,7 +186,7 @@ export default function ProductDetailPage() {
 
         {related.length > 0 && (
           <div className="mt-12 md:mt-20">
-            <h2 className="text-base md:text-lg font-light text-gray-900 dark:text-white tracking-wide mb-6 md:mb-8">You May Also Like</h2>
+            <h2 className="text-base md:text-lg font-light text-gray-900 dark:text-white tracking-wide mb-6 md:mb-8">{t("product.youMayAlsoLike")}</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-x-3 md:gap-x-4 gap-y-6 md:gap-y-8">
               {related.map((p) => <ProductCard key={p.id} product={p} />)}
             </div>

@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useTheme } from "../context/ThemeContext";
+import { useLanguage } from "../context/LanguageContext";
 import { api } from "../api";
 import Logo from "./Logo";
 
@@ -23,6 +24,7 @@ export default function Header({ onMenuToggle }) {
   const { user, logout, isAdmin } = useAuth();
   const { count: wishlistCount } = useWishlist();
   const { dark, toggle } = useTheme();
+  const { lang, setLang, t } = useLanguage();
 
   useEffect(() => {
     function handleClick(e) {
@@ -87,7 +89,7 @@ export default function Header({ onMenuToggle }) {
             {searchOpen ? (
               <div className="flex items-center gap-2 fixed inset-x-0 top-0 z-50 bg-white dark:bg-gray-950 p-3 border-b border-gray-100 dark:border-white/5 lg:static lg:inset-auto lg:z-auto lg:bg-transparent lg:dark:bg-transparent lg:p-0 lg:border-0">
                 <input
-                  autoFocus type="text" value={searchQuery} onChange={(e) => handleSearch(e.target.value)} onKeyDown={handleSearchKeyDown} placeholder="Search products..."
+                  autoFocus type="text" value={searchQuery} onChange={(e) => handleSearch(e.target.value)} onKeyDown={handleSearchKeyDown} placeholder={t("common.search")}
                   className="flex-1 lg:w-72 px-4 py-2 text-sm border border-gray-200 dark:border-white/10 bg-white dark:bg-white/5 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 rounded-full focus:outline-none focus:border-gray-400 dark:focus:border-white/20 focus:ring-2 focus:ring-gray-100 dark:focus:ring-white/10 transition-all"
                 />
                 <button onClick={() => { setSearchOpen(false); setSearchQuery(""); setSearchResults([]); }} className="p-2 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">
@@ -112,9 +114,32 @@ export default function Header({ onMenuToggle }) {
             )}
             {searchOpen && searchQuery.trim().length > 0 && !searching && searchResults.length === 0 && (
               <div className="fixed inset-x-0 top-14 lg:absolute lg:top-full lg:mt-2 lg:right-0 lg:w-80 bg-white dark:bg-gray-900 lg:rounded-xl shadow-xl border border-gray-100 dark:border-white/10 overflow-hidden z-50 p-6 text-center mx-4 lg:mx-0 mt-2 lg:mt-2 rounded-xl lg:rounded-xl">
-                <p className="text-sm text-gray-400 dark:text-gray-500">No results found</p>
+                <p className="text-sm text-gray-400 dark:text-gray-500">{t("common.noResults")}</p>
               </div>
             )}
+          </div>
+
+          <div className="flex items-center bg-gray-100 dark:bg-white/10 rounded-full p-0.5">
+            <button
+              onClick={() => setLang("en")}
+              className={`px-2.5 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer ${
+                lang === "en"
+                  ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              EN
+            </button>
+            <button
+              onClick={() => setLang("fr")}
+              className={`px-2.5 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer ${
+                lang === "fr"
+                  ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm"
+                  : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              FR
+            </button>
           </div>
 
           <button onClick={() => navigate("/wishlist")} className="relative p-2 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 rounded-full transition-all cursor-pointer">
@@ -144,11 +169,11 @@ export default function Header({ onMenuToggle }) {
                   <p className="text-sm font-medium text-gray-900 dark:text-white">{user.name}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">{user.email}</p>
                 </div>
-                <button onClick={() => { setUserMenuOpen(false); navigate("/account"); }} className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">My Account</button>
-                <button onClick={() => { setUserMenuOpen(false); navigate("/account"); }} className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">My Orders</button>
-                {isAdmin && <button onClick={() => { setUserMenuOpen(false); navigate("/admin"); }} className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">Dashboard</button>}
+                <button onClick={() => { setUserMenuOpen(false); navigate("/account"); }} className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">{t("nav.myAccount")}</button>
+                <button onClick={() => { setUserMenuOpen(false); navigate("/account"); }} className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">{t("nav.myOrders")}</button>
+                {isAdmin && <button onClick={() => { setUserMenuOpen(false); navigate("/admin"); }} className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">{t("nav.dashboard")}</button>}
                 <div className="border-t border-gray-100 dark:border-white/5" />
-                <button onClick={() => { logout(); setUserMenuOpen(false); navigate("/"); }} className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">Sign Out</button>
+                <button onClick={() => { logout(); setUserMenuOpen(false); navigate("/"); }} className="w-full text-left px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer">{t("common.signOut")}</button>
               </div>
             )}
           </div>
@@ -161,14 +186,14 @@ export default function Header({ onMenuToggle }) {
             {cartOpen && (
               <div className="absolute top-full mt-2 right-0 w-[calc(100vw-2rem)] max-w-96 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-100 dark:border-white/10 z-50 overflow-hidden">
                 <div className="px-5 py-4 border-b border-gray-100 dark:border-white/5 flex items-center justify-between">
-                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Shopping Bag ({totalItems})</h3>
+                  <h3 className="text-sm font-semibold text-gray-900 dark:text-white">{t("cart.shoppingBag", { count: totalItems })}</h3>
                   <button onClick={() => setCartOpen(false)} className="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
                 </div>
                 <div className="max-h-80 overflow-y-auto">
                   {items.length === 0 ? (
                     <div className="px-5 py-10 text-center">
                       <svg className="w-10 h-10 mx-auto text-gray-300 dark:text-gray-600 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" /></svg>
-                      <p className="text-sm text-gray-400 dark:text-gray-500">Your bag is empty</p>
+                      <p className="text-sm text-gray-400 dark:text-gray-500">{t("cart.bagEmpty")}</p>
                     </div>
                   ) : items.map((item) => (
                     <div key={item.cartKey} className="flex gap-4 px-5 py-4 border-b border-gray-50 dark:border-white/5 hover:bg-gray-50/50 dark:hover:bg-white/5 transition-colors">
@@ -177,9 +202,9 @@ export default function Header({ onMenuToggle }) {
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
                         <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${Number(item.price).toFixed(2)} {item.selectedSize && `· ${item.selectedSize}`}</p>
                         <div className="flex items-center gap-2 mt-2">
-                          <button onClick={() => updateQuantity(item.cartKey, item.quantity - 1)} className="w-6 h-6 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/20 text-xs cursor-pointer">-</button>
+                          <button onClick={() => updateQuantity(item.cartKey, item.quantity - 1)} className="w-6 h-6 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/20 text-xs cursor-pointer" aria-label={t("common.decrement")}>-</button>
                           <span className="text-xs font-medium w-4 text-center text-gray-900 dark:text-white">{item.quantity}</span>
-                          <button onClick={() => updateQuantity(item.cartKey, item.quantity + 1)} className="w-6 h-6 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/20 text-xs cursor-pointer">+</button>
+                          <button onClick={() => updateQuantity(item.cartKey, item.quantity + 1)} className="w-6 h-6 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/20 text-xs cursor-pointer" aria-label={t("common.increment")}>+</button>
                         </div>
                       </div>
                       <div className="flex flex-col items-end justify-between">
@@ -192,11 +217,11 @@ export default function Header({ onMenuToggle }) {
                 {items.length > 0 && (
                   <div className="px-5 py-4 border-t border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-sm text-gray-600 dark:text-gray-400">Subtotal</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400">{t("common.subtotal")}</span>
                       <span className="text-sm font-semibold text-gray-900 dark:text-white">${totalPrice.toFixed(2)}</span>
                     </div>
-                    <button onClick={() => { setCartOpen(false); navigate("/checkout"); }} className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors cursor-pointer">Checkout</button>
-                    <button onClick={() => { setCartOpen(false); navigate("/bag"); }} className="w-full py-2.5 mt-2 bg-transparent text-gray-600 dark:text-gray-400 text-xs font-medium hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer">View Shopping Bag</button>
+                    <button onClick={() => { setCartOpen(false); navigate("/checkout"); }} className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors cursor-pointer">{t("checkout.checkout")}</button>
+                    <button onClick={() => { setCartOpen(false); navigate("/bag"); }} className="w-full py-2.5 mt-2 bg-transparent text-gray-600 dark:text-gray-400 text-xs font-medium hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer">{t("cart.proceedToCheckout")}</button>
                   </div>
                 )}
               </div>

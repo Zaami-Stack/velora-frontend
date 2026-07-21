@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useToast } from "../context/ToastContext";
+import { useLanguage } from "../context/LanguageContext";
 
 const quickSizes = ["XS", "S", "M", "L"];
 
@@ -10,6 +11,7 @@ export default function ProductCard({ product, variant = "default" }) {
   const { addItem } = useCart();
   const { toggle, isWishlisted } = useWishlist();
   const toast = useToast();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const liked = isWishlisted(product.id);
   const [quickSize, setQuickSize] = useState(null);
@@ -23,14 +25,14 @@ export default function ProductCard({ product, variant = "default" }) {
     const colorIdx = hoveredColor ? product.colors.findIndex((c) => (typeof c === "string" ? c : c.hex) === hoveredColor.hex) : 0;
     const colorHex = hoveredColor?.hex || product.colors?.[0]?.hex || (typeof product.colors?.[0] === "string" ? product.colors[0] : null) || null;
     addItem({ ...product, selectedSize: s, selectedColor: colorHex, cartKey: `${product.id}-${s}-${colorIdx >= 0 ? colorIdx : 0}` });
-    toast.success(`${product.name} (${s}) added to bag`);
+    toast.success(t("product.addedToBag", { name: `${product.name} (${s})` }));
     setQuickSize(null);
   };
 
   const handleWishlist = (e) => {
     e.stopPropagation();
     toggle(product);
-    toast[liked ? "info" : "success"](liked ? `${product.name} removed from wishlist` : `${product.name} added to wishlist`);
+    toast[liked ? "info" : "success"](liked ? t("product.removedFromWishlistName", { name: product.name }) : t("product.addedToWishlistName", { name: product.name }));
   };
 
   if (variant === "hero") {
@@ -51,7 +53,7 @@ export default function ProductCard({ product, variant = "default" }) {
             {product.originalPrice && <span className="text-sm text-white/40 line-through">${product.originalPrice}</span>}
           </div>
           <button onClick={(e) => { e.stopPropagation(); navigate(`/product/${product.id}`); }} className="self-start px-8 py-3 bg-white text-gray-900 text-xs font-semibold uppercase tracking-wider hover:bg-gray-100 transition-all duration-300 cursor-pointer">
-            Shop Now
+            {t("product.shopNow")}
           </button>
         </div>
       </div>
@@ -93,11 +95,11 @@ export default function ProductCard({ product, variant = "default" }) {
                   </button>
                 ))}
               </div>
-              <button onClick={(e) => { e.stopPropagation(); setQuickSize(null); }} className="w-full text-[10px] text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer">Cancel</button>
+               <button onClick={(e) => { e.stopPropagation(); setQuickSize(null); }} className="w-full text-[10px] text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer">{t("common.cancel")}</button>
             </div>
           ) : (
             <button onClick={(e) => { e.stopPropagation(); setQuickSize(true); }} className="w-full py-2.5 bg-white/95 dark:bg-gray-900/95 backdrop-blur-sm text-gray-900 dark:text-white text-xs font-semibold rounded-sm hover:bg-white dark:hover:bg-gray-800 transition-colors shadow-lg cursor-pointer flex items-center justify-center gap-2">
-              <span>Quick Add</span>
+               <span>{t("product.quickAdd")}</span>
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
             </button>
           )}

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "../context/ToastContext";
+import { useLanguage } from "../context/LanguageContext";
 import Header from "../components/Header";
 import SideNav from "../components/SideNav";
 import ProductCard from "../components/ProductCard";
@@ -20,41 +21,25 @@ const categoryCards = [
   { name: "Accessories", image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=560&fit=crop" },
 ];
 
-const carouselSlides = [
-  {
-    image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1400&h=420&fit=crop",
-    badge: "Summer 2026",
-    title: "New Collection",
-    subtitle: "Discover the latest trends. Minimalist design meets effortless elegance.",
-    buttonText: "Shop Now",
-    buttonLink: "#products",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400&h=420&fit=crop",
-    badge: "Limited Time",
-    title: "Summer Sale",
-    subtitle: "Up to 50% off selected styles. Don't miss out on your favorites.",
-    buttonText: "Shop Sale",
-    buttonLink: "#products",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1400&h=420&fit=crop",
-    badge: "Editor's Pick",
-    title: "Must-Have Essentials",
-    subtitle: "Build your perfect wardrobe with timeless pieces.",
-    buttonText: "Explore",
-    buttonLink: "#products",
-  },
-];
+const categoryKeys = {
+  All: "categories.all",
+  "New In": "categories.newIn",
+  Dresses: "categories.dresses",
+  Tops: "categories.tops",
+  Pants: "categories.pants",
+  Knitwear: "categories.knitwear",
+  Shoes: "categories.shoes",
+  Bags: "categories.bags",
+  Blazers: "categories.blazers",
+  Accessories: "categories.accessories",
+};
 
-const marqueeItems = [
-  "FREE SHIPPING ON ORDERS OVER $50",
-  "NEW ARRIVALS WEEKLY",
-  "EASY 30-DAY RETURNS",
-  "SECURE CHECKOUT",
-  "MEMBERS GET 10% OFF FIRST ORDER",
-  "SUSTAINABLE FASHION",
-];
+const sortKeys = {
+  Featured: "home.sortFeatured",
+  Newest: "home.sortNewest",
+  "Price: Low to High": "home.sortPriceLow",
+  "Price: High to Low": "home.sortPriceHigh",
+};
 
 export default function HomePage() {
   const [sideNavOpen, setSideNavOpen] = useState(false);
@@ -67,6 +52,7 @@ export default function HomePage() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const toast = useToast();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const handleScroll = () => setShowBackToTop(window.scrollY > 600);
@@ -85,14 +71,14 @@ export default function HomePage() {
         const data = await api.products.list(params);
         if (!cancelled) { setProducts(data.products); setError(null); }
       } catch {
-        if (!cancelled) { setProducts([]); setError("Failed to load products. Please try again."); }
+        if (!cancelled) { setProducts([]); setError(t("home.loadError")); }
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
     fetchProducts();
     return () => { cancelled = true; };
-  }, [activeCategory, activeSort]);
+  }, [activeCategory, activeSort, t]);
 
   useEffect(() => {
     if (activeCategory !== "All") {
@@ -103,6 +89,42 @@ export default function HomePage() {
 
   const heroProduct = products.find((p) => p.badge === "New") || products[0];
   const gridProducts = products.filter((p) => p.id !== heroProduct?.id);
+
+  const carouselSlides = [
+    {
+      image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1400&h=420&fit=crop",
+      badge: t("hero.summer2026"),
+      title: t("hero.newCollection"),
+      subtitle: t("hero.newCollectionSubtitle"),
+      buttonText: t("hero.shopNow"),
+      buttonLink: "#products",
+    },
+    {
+      image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=1400&h=420&fit=crop",
+      badge: t("hero.limitedTime"),
+      title: t("hero.summerSale"),
+      subtitle: t("hero.summerSaleSubtitle"),
+      buttonText: t("hero.shopSale"),
+      buttonLink: "#products",
+    },
+    {
+      image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=1400&h=420&fit=crop",
+      badge: t("hero.editorsPick"),
+      title: t("hero.mustHaveEssentials"),
+      subtitle: t("hero.mustHaveSubtitle"),
+      buttonText: t("hero.explore"),
+      buttonLink: "#products",
+    },
+  ];
+
+  const marqueeItems = [
+    t("marquee.freeShipping"),
+    t("marquee.newArrivals"),
+    t("marquee.easyReturns"),
+    t("marquee.secureCheckout"),
+    t("marquee.membersDiscount"),
+    t("marquee.sustainable"),
+  ];
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950">
@@ -135,18 +157,18 @@ export default function HomePage() {
           {/* Category Image Cards */}
           <div className="px-4 md:px-6 py-6 md:py-10">
             <div className="flex items-center justify-between mb-4 md:mb-6">
-              <h2 className="text-base md:text-lg font-light text-gray-900 dark:text-white tracking-wide">Shop by Category</h2>
-              <button onClick={() => setActiveCategory("All")} className="text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline underline-offset-4 transition-colors cursor-pointer">View All</button>
+              <h2 className="text-base md:text-lg font-light text-gray-900 dark:text-white tracking-wide">{t("home.shopByCategory")}</h2>
+              <button onClick={() => setActiveCategory("All")} className="text-xs font-medium text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline underline-offset-4 transition-colors cursor-pointer">{t("common.viewAll")}</button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3">
               {categoryCards.map((cat) => (
                 <button key={cat.name} onClick={() => { setActiveCategory(cat.name); navigate("/"); }}
                   className="group relative aspect-[3/4] overflow-hidden bg-gray-100 dark:bg-white/5 rounded-sm cursor-pointer">
-                  <img src={cat.image} alt={cat.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                  <img src={cat.image} alt={t(categoryKeys[cat.name])} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                   <div className="absolute inset-0 flex flex-col items-center justify-end pb-6">
-                    <span className="text-sm font-medium text-white tracking-wide mb-1">{cat.name}</span>
-                    <span className="text-[10px] text-white/60 uppercase tracking-widest">Shop Now</span>
+                    <span className="text-sm font-medium text-white tracking-wide mb-1">{t(categoryKeys[cat.name])}</span>
+                    <span className="text-[10px] text-white/60 uppercase tracking-widest">{t("product.shopNow")}</span>
                   </div>
                 </button>
               ))}
@@ -156,14 +178,14 @@ export default function HomePage() {
           {/* Features Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 border-y border-gray-100 dark:border-white/5">
             {[
-              { icon: "M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H18.75m-7.5-3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z", text: "Free Shipping" },
-              { icon: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99", text: "Free Returns" },
-              { icon: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z", text: "Secure Payment" },
-              { icon: "M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155", text: "24/7 Support" },
+              { icon: "M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H18.75m-7.5-3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z", textKey: "home.freeShipping" },
+              { icon: "M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99", textKey: "home.freeReturns" },
+              { icon: "M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z", textKey: "home.securePayment" },
+              { icon: "M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155", textKey: "home.support247" },
             ].map((f, i) => (
               <div key={i} className="flex items-center justify-center gap-2 sm:gap-3 py-3 sm:py-5 border-r border-gray-100 dark:border-white/5 last:border-r-0">
                 <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1}><path strokeLinecap="round" strokeLinejoin="round" d={f.icon} /></svg>
-                <span className="text-xs font-medium text-gray-600 dark:text-gray-300">{f.text}</span>
+                <span className="text-xs font-medium text-gray-600 dark:text-gray-300">{t(f.textKey)}</span>
               </div>
             ))}
           </div>
@@ -175,18 +197,18 @@ export default function HomePage() {
                 {allCategories.map((cat) => (
                   <button key={cat} onClick={() => setActiveCategory(cat)}
                     className={`px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-medium rounded-full whitespace-nowrap transition-all duration-200 cursor-pointer ${activeCategory === cat ? "bg-gray-900 dark:bg-white text-white dark:text-gray-900 shadow-sm" : "bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/20"}`}>
-                    {cat}
+                    {t(categoryKeys[cat])}
                   </button>
                 ))}
               </div>
               <div className="flex items-center gap-2 ml-2 shrink-0">
-                <span className="text-[11px] text-gray-400 dark:text-gray-500 uppercase tracking-wider hidden sm:inline">Sort:</span>
+                <span className="text-[11px] text-gray-400 dark:text-gray-500 uppercase tracking-wider hidden sm:inline">{t("home.sort")}:</span>
                 <select value={activeSort} onChange={(e) => setActiveSort(e.target.value)} className="text-[11px] sm:text-xs font-medium text-gray-700 dark:text-gray-300 bg-transparent border-none focus:outline-none cursor-pointer">
-                  {sortOptions.map((opt) => <option key={opt}>{opt}</option>)}
+                  {sortOptions.map((opt) => <option key={opt} value={opt}>{t(sortKeys[opt])}</option>)}
                 </select>
               </div>
             </div>
-            <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-2">{loading ? "Loading..." : `${products.length} products`}</p>
+            <p className="text-[11px] text-gray-400 dark:text-gray-500 mt-2">{loading ? t("common.loading") : t("home.productCount", { count: products.length })}</p>
           </div>
 
           {/* Product Grid - Editorial Layout */}
@@ -207,7 +229,7 @@ export default function HomePage() {
               <div className="text-center py-20">
                 <svg className="w-16 h-16 mx-auto text-red-200 dark:text-red-800 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" /></svg>
                 <p className="text-gray-500 dark:text-gray-400 text-sm mb-4">{error}</p>
-                <button onClick={() => { setError(null); setLoading(true); }} className="text-xs font-medium text-gray-900 dark:text-white underline underline-offset-4 cursor-pointer">Try Again</button>
+                <button onClick={() => { setError(null); setLoading(true); }} className="text-xs font-medium text-gray-900 dark:text-white underline underline-offset-4 cursor-pointer">{t("common.tryAgain")}</button>
               </div>
             ) : (
               <>
@@ -229,8 +251,8 @@ export default function HomePage() {
                 ) : products.length === 0 && (
                   <div className="text-center py-20">
                     <svg className="w-16 h-16 mx-auto text-gray-200 dark:text-gray-700 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={0.5}><path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" /></svg>
-                    <p className="text-gray-400 dark:text-gray-500 text-sm">No products found in this category.</p>
-                    <button onClick={() => setActiveCategory("All")} className="mt-3 text-xs font-medium text-gray-900 dark:text-white underline underline-offset-4 cursor-pointer">View all products</button>
+                    <p className="text-gray-400 dark:text-gray-500 text-sm">{t("home.noProducts")}</p>
+                    <button onClick={() => setActiveCategory("All")} className="mt-3 text-xs font-medium text-gray-900 dark:text-white underline underline-offset-4 cursor-pointer">{t("common.viewAllProducts")}</button>
                   </div>
                 )}
               </>
@@ -241,11 +263,11 @@ export default function HomePage() {
           <div className="mx-4 md:mx-6 mb-6 md:mb-8 p-6 md:p-10 bg-gray-900 dark:bg-white/5 rounded-2xl text-center overflow-hidden relative">
             <div className="absolute inset-0 animate-shimmer" />
             <div className="relative">
-              <h3 className="text-base md:text-lg font-light text-white tracking-wide mb-1.5 md:mb-2">Stay in the Loop</h3>
-              <p className="text-xs sm:text-sm text-gray-400 mb-4 md:mb-6 max-w-md mx-auto">Subscribe to get exclusive offers, new arrivals, and style inspiration.</p>
+              <h3 className="text-base md:text-lg font-light text-white tracking-wide mb-1.5 md:mb-2">{t("home.stayInLoop")}</h3>
+              <p className="text-xs sm:text-sm text-gray-400 mb-4 md:mb-6 max-w-md mx-auto">{t("home.newsletterDesc")}</p>
               <div className="flex max-w-sm mx-auto">
-                <input type="email" placeholder="Enter your email" className="flex-1 px-4 py-3 text-sm bg-white/10 border border-white/20 rounded-l-xl text-white placeholder-gray-500 focus:outline-none focus:border-white/40" />
-                <button onClick={() => { setSubscribed(true); toast.success("Subscribed to newsletter!"); }} disabled={subscribed} className="px-4 sm:px-6 py-3 bg-white dark:bg-white text-gray-900 dark:text-gray-900 text-xs sm:text-sm font-medium rounded-r-xl hover:bg-gray-100 dark:hover:bg-gray-200 transition-colors cursor-pointer disabled:opacity-50 shrink-0">{subscribed ? "Subscribed" : "Subscribe"}</button>
+                <input type="email" placeholder={t("home.enterEmail")} className="flex-1 px-4 py-3 text-sm bg-white/10 border border-white/20 rounded-l-xl text-white placeholder-gray-500 focus:outline-none focus:border-white/40" />
+                <button onClick={() => { setSubscribed(true); toast.success(t("home.subscribedToast")); }} disabled={subscribed} className="px-4 sm:px-6 py-3 bg-white dark:bg-white text-gray-900 dark:text-gray-900 text-xs sm:text-sm font-medium rounded-r-xl hover:bg-gray-100 dark:hover:bg-gray-200 transition-colors cursor-pointer disabled:opacity-50 shrink-0">{subscribed ? t("home.subscribed") : t("home.subscribe")}</button>
               </div>
             </div>
           </div>
@@ -254,38 +276,38 @@ export default function HomePage() {
           <footer className="border-t border-gray-100 dark:border-white/5 px-4 md:px-6 py-8 md:py-12">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
               <div>
-                <h4 className="text-[11px] font-semibold text-gray-900 dark:text-white uppercase tracking-[0.15em] mb-4">Help</h4>
+                <h4 className="text-[11px] font-semibold text-gray-900 dark:text-white uppercase tracking-[0.15em] mb-4">{t("nav.help")}</h4>
                 <ul className="space-y-2.5">
-                  {["Customer Service", "Track Order", "Returns & Exchanges", "Shipping Info"].map((item) => (<li key={item}><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">{item}</a></li>))}
+                  {[t("footer.customerService"), t("footer.trackOrder"), t("footer.returnsExchanges"), t("footer.shippingInfo")].map((item) => (<li key={item}><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">{item}</a></li>))}
                 </ul>
               </div>
               <div>
-                <h4 className="text-[11px] font-semibold text-gray-900 dark:text-white uppercase tracking-[0.15em] mb-4">About</h4>
+                <h4 className="text-[11px] font-semibold text-gray-900 dark:text-white uppercase tracking-[0.15em] mb-4">{t("footer.about")}</h4>
                 <ul className="space-y-2.5">
-                  {["Our Story", "Careers", "Press", "Sustainability"].map((item) => (<li key={item}><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">{item}</a></li>))}
+                  {[t("footer.ourStory"), t("footer.careers"), t("footer.press"), t("footer.sustainability")].map((item) => (<li key={item}><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">{item}</a></li>))}
                 </ul>
               </div>
               <div>
-                <h4 className="text-[11px] font-semibold text-gray-900 dark:text-white uppercase tracking-[0.15em] mb-4">Follow Us</h4>
+                <h4 className="text-[11px] font-semibold text-gray-900 dark:text-white uppercase tracking-[0.15em] mb-4">{t("footer.followUs")}</h4>
                 <ul className="space-y-2.5">
-                  {["Instagram", "Twitter", "Pinterest", "TikTok"].map((item) => (<li key={item}><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">{item}</a></li>))}
+                  {[t("footer.instagram"), t("footer.twitter"), t("footer.pinterest"), t("footer.tiktok")].map((item) => (<li key={item}><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">{item}</a></li>))}
                 </ul>
               </div>
               <div>
-                <h4 className="text-[11px] font-semibold text-gray-900 dark:text-white uppercase tracking-[0.15em] mb-4">Contact</h4>
+                <h4 className="text-[11px] font-semibold text-gray-900 dark:text-white uppercase tracking-[0.15em] mb-4">{t("footer.contact")}</h4>
                 <ul className="space-y-2.5">
                   <li><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">support@velora.com</a></li>
                   <li><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">+1 (555) 123-4567</a></li>
-                  <li><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Live Chat</a></li>
+                  <li><a href="#" className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">{t("footer.liveChat")}</a></li>
                 </ul>
               </div>
             </div>
             <div className="mt-8 md:mt-10 pt-5 md:pt-6 border-t border-gray-100 dark:border-white/5 flex flex-col md:flex-row items-center justify-between gap-3 md:gap-4">
               <Logo />
               <div className="flex items-center gap-4">
-                {["Visa", "Mastercard", "Amex", "PayPal"].map((p) => (<span key={p} className="text-[10px] text-gray-400 dark:text-gray-500 font-medium border border-gray-200 dark:border-white/10 rounded px-2 py-1">{p}</span>))}
+                {[t("footer.visa"), t("footer.mastercard"), t("footer.amex"), t("footer.payPal")].map((p) => (<span key={p} className="text-[10px] text-gray-400 dark:text-gray-500 font-medium border border-gray-200 dark:border-white/10 rounded px-2 py-1">{p}</span>))}
               </div>
-              <p className="text-[11px] text-gray-400 dark:text-gray-500">&copy; 2026 Velora. All rights reserved.</p>
+              <p className="text-[11px] text-gray-400 dark:text-gray-500">{t("footer.copyright")}</p>
             </div>
           </footer>
         </main>

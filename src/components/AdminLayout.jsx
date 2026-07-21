@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-
-const NAV_LINKS = [
-  { path: "/admin", label: "Dashboard" },
-  { path: "/admin/orders", label: "Orders" },
-  { path: "/admin/products", label: "Products" },
-  { path: "/admin/users", label: "Users" },
-];
+import { useLanguage } from "../context/LanguageContext";
 
 export default function AdminLayout() {
   const { user, isAdmin, loading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLanguage();
+
+  const NAV_LINKS = [
+    { path: "/admin", label: t("admin.overview") },
+    { path: "/admin/orders", label: t("admin.orders") },
+    { path: "/admin/products", label: t("admin.products") },
+    { path: "/admin/users", label: t("admin.users") },
+  ];
 
   if (loading) {
     return (
@@ -31,10 +33,10 @@ export default function AdminLayout() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
             </svg>
           </div>
-          <h1 className="text-xl font-semibold text-white mb-2">Access Denied</h1>
-          <p className="text-sm text-gray-400 mb-6">You don't have permission to access the admin panel.</p>
+          <h1 className="text-xl font-semibold text-white mb-2">{t("admin.accessDenied")}</h1>
+          <p className="text-sm text-gray-400 mb-6">{t("admin.noPermission")}</p>
           <button onClick={() => navigate("/")} className="px-6 py-2.5 bg-white text-gray-950 text-sm font-medium rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
-            Back to Store
+            {t("common.backToStore")}
           </button>
         </div>
       </div>
@@ -61,7 +63,7 @@ export default function AdminLayout() {
             ))}
           </div>
           <button onClick={() => navigate("/")} className="text-[11px] text-gray-500 hover:text-white transition-colors cursor-pointer shrink-0 ml-3">
-            View Store
+            {t("common.viewStore")}
           </button>
         </div>
       </header>

@@ -1,9 +1,14 @@
 import { useState, useEffect } from "react";
 import { api } from "../../api";
 import { useToast } from "../../context/ToastContext";
+import { useLanguage } from "../../context/LanguageContext";
 
 const CATEGORIES = ["Blazers", "Dresses", "Tops", "Pants", "Knitwear", "Shoes", "Bags", "Accessories"];
 const BADGES = ["", "New", "Sale"];
+
+function categoryLabel(cat, t) {
+  return t("categories." + cat.toLowerCase());
+}
 
 const emptyForm = {
   name: "",
@@ -19,6 +24,7 @@ const emptyForm = {
 };
 
 export default function ProductsPage() {
+  const { t } = useLanguage();
   const { success, error: toastError } = useToast();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -105,7 +111,7 @@ export default function ProductsPage() {
 
   async function handleSave() {
     if (!form.name || !form.category || !form.price || !form.image) {
-      toastError("Name, category, price, and image URL are required");
+      toastError(t("productsPage.requiredFields"));
       return;
     }
     try {
@@ -126,11 +132,11 @@ export default function ProductsPage() {
       if (modal?.type === "edit") {
         const updated = await api.admin.updateProduct(modal.id, payload);
         setProducts(products.map((p) => (p.id === modal.id ? updated : p)));
-        success("Product updated");
+        success(t("productsPage.productUpdated"));
       } else {
         const created = await api.admin.createProduct(payload);
         setProducts([...products, created]);
-        success("Product created");
+        success(t("productsPage.productCreated"));
       }
       setModal(null);
     } catch (err) {
@@ -145,11 +151,16 @@ export default function ProductsPage() {
       await api.admin.deleteProduct(id);
       setProducts(products.filter((p) => p.id !== id));
       setDeleteConfirm(null);
-      success("Product deleted");
+      success(t("productsPage.productDeleted"));
     } catch (err) {
       toastError(err.message);
     }
   }
+
+  const badgeLabels = {
+    New: t("productsPage.badgeNew"),
+    Sale: t("productsPage.badgeSale"),
+  };
 
   const badgeColors = {
     New: "bg-emerald-400/10 text-emerald-400 ring-1 ring-emerald-400/20",
@@ -160,12 +171,12 @@ export default function ProductsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Products</h1>
-          <p className="text-sm text-gray-400 mt-1">{products.length} products in your store</p>
+          <h1 className="text-2xl font-bold text-white">{t("productsPage.heading")}</h1>
+          <p className="text-sm text-gray-400 mt-1">{t("productsPage.productCount", { count: products.length })}</p>
         </div>
         <button onClick={openAdd} className="flex items-center gap-2 px-4 py-2.5 bg-white text-gray-950 text-sm font-semibold rounded-xl hover:bg-gray-100 transition-colors cursor-pointer">
           <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-          Add Product
+          {t("productsPage.addProduct")}
         </button>
       </div>
 
@@ -175,7 +186,7 @@ export default function ProductsPage() {
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search products..."
+          placeholder={t("productsPage.searchProducts")}
           className="w-full pl-10 pr-4 py-2.5 bg-white/[0.03] border border-white/5 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/10 transition-colors"
         />
       </div>
@@ -188,7 +199,7 @@ export default function ProductsPage() {
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-24">
-          <p className="text-sm text-gray-500">{search ? "No products match your search" : "No products yet"}</p>
+          <p className="text-sm text-gray-500">{search ? t("productsPage.noMatch") : t("productsPage.noProducts")}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -198,14 +209,14 @@ export default function ProductsPage() {
                 <img src={p.image} alt={p.name} className="w-16 h-20 rounded-lg object-cover bg-white/5 shrink-0" />
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-white truncate">{p.name}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">{p.category} &middot; ID: {p.id}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{categoryLabel(p.category, t)} &middot; ID: {p.id}</p>
                   <div className="flex items-center gap-2 mt-1.5">
                     <span className="text-sm font-semibold text-white">${Number(p.price).toFixed(2)}</span>
                     {p.originalPrice && <span className="text-xs text-gray-500 line-through">${Number(p.originalPrice).toFixed(2)}</span>}
                   </div>
                   <div className="flex items-center gap-2 mt-1.5">
                     {p.badge ? (
-                      <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold ${badgeColors[p.badge] || ""}`}>{p.badge}</span>
+                      <span className={`inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold ${badgeColors[p.badge] || ""}`}>{badgeLabels[p.badge] || p.badge}</span>
                     ) : null}
                     <span className="text-[11px] text-gray-500">{p.rating} ({p.reviews})</span>
                   </div>
@@ -221,8 +232,8 @@ export default function ProductsPage() {
                 </div>
               )}
               <div className="flex items-center justify-end gap-1 mt-3 pt-3 border-t border-white/5">
-                <button onClick={() => openEdit(p)} className="px-3 py-1.5 text-xs font-medium text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer">Edit</button>
-                <button onClick={() => setDeleteConfirm(p)} className="px-3 py-1.5 text-xs font-medium text-gray-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">Delete</button>
+                <button onClick={() => openEdit(p)} className="px-3 py-1.5 text-xs font-medium text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors cursor-pointer">{t("common.edit")}</button>
+                <button onClick={() => setDeleteConfirm(p)} className="px-3 py-1.5 text-xs font-medium text-gray-400 hover:text-red-400 hover:bg-white/5 rounded-lg transition-colors cursor-pointer">{t("common.delete")}</button>
               </div>
             </div>
           ))}
@@ -233,63 +244,63 @@ export default function ProductsPage() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[70] flex items-center justify-center p-4" onClick={() => setModal(null)}>
           <div className="bg-gray-900 rounded-2xl border border-white/10 w-full max-w-lg max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="px-6 py-5 border-b border-white/5">
-              <h2 className="text-lg font-bold text-white">{modal?.type === "edit" ? "Edit Product" : "Add Product"}</h2>
+              <h2 className="text-lg font-bold text-white">{modal?.type === "edit" ? t("productsPage.editProduct") : t("productsPage.addProductHeading")}</h2>
             </div>
             <div className="px-6 py-5 space-y-4">
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Name *</label>
-                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder="Product name" />
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.name")}</label>
+                <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder={t("productsPage.namePlaceholder")} />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Category *</label>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.category")}</label>
                   <select value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-white/20">
-                    {CATEGORIES.map((c) => <option key={c} value={c} className="bg-gray-900">{c}</option>)}
+                    {CATEGORIES.map((c) => <option key={c} value={c} className="bg-gray-900">{categoryLabel(c, t)}</option>)}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Badge</label>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.badge")}</label>
                   <select value={form.badge} onChange={(e) => setForm({ ...form, badge: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white focus:outline-none focus:border-white/20">
-                    {BADGES.map((b) => <option key={b} value={b} className="bg-gray-900">{b || "None"}</option>)}
+                    {BADGES.map((b) => <option key={b} value={b} className="bg-gray-900">{b ? (badgeLabels[b] || b) : t("common.none")}</option>)}
                   </select>
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Price *</label>
-                  <input type="number" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder="99.00" />
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.price")}</label>
+                  <input type="number" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder={t("productsPage.pricePlaceholder")} />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Original Price</label>
-                  <input type="number" step="0.01" value={form.originalPrice} onChange={(e) => setForm({ ...form, originalPrice: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder="129.00" />
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.originalPrice")}</label>
+                  <input type="number" step="0.01" value={form.originalPrice} onChange={(e) => setForm({ ...form, originalPrice: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder={t("productsPage.originalPricePlaceholder")} />
                 </div>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Rating</label>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.rating")}</label>
                   <input type="number" step="0.1" min="0" max="5" value={form.rating} onChange={(e) => setForm({ ...form, rating: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-gray-400 mb-1.5">Reviews</label>
+                  <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.reviews")}</label>
                   <input type="number" min="0" value={form.reviews} onChange={(e) => setForm({ ...form, reviews: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Image URL *</label>
-                <input value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder="https://..." />
-                {form.image && <img src={form.image} alt="Preview" className="mt-2 w-16 h-20 rounded-lg object-cover bg-white/5" />}
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.imageUrl")}</label>
+                <input value={form.image} onChange={(e) => setForm({ ...form, image: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder={t("productsPage.imagePlaceholder")} />
+                {form.image && <img src={form.image} alt={t("productsPage.preview")} className="mt-2 w-16 h-20 rounded-lg object-cover bg-white/5" />}
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Description</label>
-                <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20 resize-none" placeholder="Product description..." />
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.description")}</label>
+                <textarea rows={2} value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} className="w-full px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20 resize-none" placeholder={t("productsPage.descriptionPlaceholder")} />
               </div>
               <div>
-                <label className="block text-xs font-medium text-gray-400 mb-1.5">Colors</label>
+                <label className="block text-xs font-medium text-gray-400 mb-1.5">{t("productsPage.colors")}</label>
                 <div className="space-y-2 mb-2">
                   <div className="flex flex-col sm:flex-row gap-2">
-                    <input value={colorInput} onChange={(e) => setColorInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addColor())} className="w-full sm:w-28 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder="#1a1a1a" />
-                    <input value={colorImageInput} onChange={(e) => setColorImageInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addColor())} className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder="Image URL for this color (optional)" />
-                    <button type="button" onClick={addColor} className="px-4 py-2 bg-white/10 text-white text-sm font-medium rounded-lg hover:bg-white/15 transition-colors cursor-pointer shrink-0">Add Color</button>
+                    <input value={colorInput} onChange={(e) => setColorInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addColor())} className="w-full sm:w-28 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder={t("productsPage.colorPlaceholder")} />
+                    <input value={colorImageInput} onChange={(e) => setColorImageInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && (e.preventDefault(), addColor())} className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-white placeholder-gray-500 focus:outline-none focus:border-white/20" placeholder={t("productsPage.colorImageHint")} />
+                    <button type="button" onClick={addColor} className="px-4 py-2 bg-white/10 text-white text-sm font-medium rounded-lg hover:bg-white/15 transition-colors cursor-pointer shrink-0">{t("productsPage.addColor")}</button>
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -297,7 +308,7 @@ export default function ProductsPage() {
                     <div key={c.hex} className="flex items-center gap-2 px-3 py-2 bg-white/[0.03] rounded-lg border border-white/5">
                       <div className="w-5 h-5 rounded-full border border-white/10 shrink-0" style={{ backgroundColor: c.hex }} />
                       <span className="text-xs text-gray-400 shrink-0">{c.hex}</span>
-                      <input value={c.image || ""} onChange={(e) => updateColorImage(c.hex, e.target.value)} className="flex-1 px-2 py-1 bg-white/5 border border-white/10 rounded text-xs text-white placeholder-gray-600 focus:outline-none focus:border-white/20" placeholder="Image URL (optional)" />
+                      <input value={c.image || ""} onChange={(e) => updateColorImage(c.hex, e.target.value)} className="flex-1 px-2 py-1 bg-white/5 border border-white/10 rounded text-xs text-white placeholder-gray-600 focus:outline-none focus:border-white/20" placeholder={t("productsPage.imageUrlOptional")} />
                       {c.image && <img src={c.image} alt="" className="w-8 h-8 rounded object-cover bg-white/5 shrink-0" />}
                       <button onClick={() => removeColor(c.hex)} className="text-gray-500 hover:text-red-400 cursor-pointer shrink-0 text-lg leading-none">&times;</button>
                     </div>
@@ -306,9 +317,9 @@ export default function ProductsPage() {
               </div>
             </div>
             <div className="px-6 py-4 border-t border-white/5 flex items-center justify-end gap-3">
-              <button onClick={() => setModal(null)} className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors cursor-pointer">Cancel</button>
+              <button onClick={() => setModal(null)} className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors cursor-pointer">{t("common.cancel")}</button>
               <button onClick={handleSave} disabled={saving} className="px-5 py-2 bg-white text-gray-950 text-sm font-semibold rounded-lg hover:bg-gray-100 transition-colors cursor-pointer disabled:opacity-50">
-                {saving ? "Saving..." : modal?.type === "edit" ? "Save Changes" : "Create Product"}
+                {saving ? t("common.saving") : modal?.type === "edit" ? t("common.save") : t("productsPage.createProduct")}
               </button>
             </div>
           </div>
@@ -323,14 +334,14 @@ export default function ProductsPage() {
                 <svg className="w-5 h-5 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-white">Delete Product</h3>
-                <p className="text-xs text-gray-400 mt-0.5">This cannot be undone</p>
+                <h3 className="text-sm font-semibold text-white">{t("productsPage.deleteProduct")}</h3>
+                <p className="text-xs text-gray-400 mt-0.5">{t("productsPage.deleteWarning")}</p>
               </div>
             </div>
-            <p className="text-sm text-gray-300 mb-5">Are you sure you want to delete <strong>{deleteConfirm.name}</strong>?</p>
+            <p className="text-sm text-gray-300 mb-5">{t("productsPage.deleteConfirm")} <strong>{deleteConfirm.name}</strong>?</p>
             <div className="flex items-center justify-end gap-3">
-              <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors cursor-pointer">Cancel</button>
-              <button onClick={() => handleDelete(deleteConfirm.id)} className="px-5 py-2 bg-red-500/10 text-red-400 text-sm font-semibold rounded-lg hover:bg-red-500/20 ring-1 ring-red-500/20 transition-colors cursor-pointer">Delete</button>
+              <button onClick={() => setDeleteConfirm(null)} className="px-4 py-2 text-sm font-medium text-gray-400 hover:text-white transition-colors cursor-pointer">{t("common.cancel")}</button>
+              <button onClick={() => handleDelete(deleteConfirm.id)} className="px-5 py-2 bg-red-500/10 text-red-400 text-sm font-semibold rounded-lg hover:bg-red-500/20 ring-1 ring-red-500/20 transition-colors cursor-pointer">{t("common.delete")}</button>
             </div>
           </div>
         </div>

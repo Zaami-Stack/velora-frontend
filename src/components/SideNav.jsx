@@ -1,36 +1,38 @@
 import { useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
 
 const categories = [
-  { name: "New In", sub: ["Dresses", "Tops", "Pants"] },
-  { name: "Dresses", sub: ["Maxi Dresses", "Mini Dresses", "Midi Dresses", "Slip Dresses"] },
-  { name: "Tops", sub: ["Blouses", "T-Shirts", "Crop Tops", "Bodysuits"] },
-  { name: "Pants", sub: ["Tailored", "Wide Leg", "Skinny", "Cargo"] },
-  { name: "Blazers", sub: ["Single Breasted", "Double Breasted", "Oversized", "Cropped"] },
-  { name: "Knitwear", sub: ["Cardigans", "Sweaters", "Knit Dresses", "Vests"] },
-  { name: "Shoes", sub: ["Heels", "Boots", "Sandals", "Flats"] },
-  { name: "Bags", sub: ["Shoulder", "Crossbody", "Tote", "Clutch"] },
-  { name: "Accessories", sub: ["Jewellery", "Scarves", "Belts", "Sunglasses"] },
+  { key: "newIn", sub: ["maxiDresses", "miniDresses", "midiDresses", "slipDresses", "tops", "pants"] },
+  { key: "dresses", sub: ["maxiDresses", "miniDresses", "midiDresses", "slipDresses"] },
+  { key: "tops", sub: ["blouses", "tShirts", "cropTops", "bodysuits"] },
+  { key: "pants", sub: ["tailored", "wideLeg", "skinny", "cargo"] },
+  { key: "blazers", sub: ["singleBreasted", "doubleBreasted", "oversized", "cropped"] },
+  { key: "knitwear", sub: ["cardigans", "sweaters", "knitDresses", "vests"] },
+  { key: "shoes", sub: ["heels", "boots", "sandals", "flats"] },
+  { key: "bags", sub: ["shoulder", "crossbody", "tote", "clutch"] },
+  { key: "accessories", sub: ["jewellery", "scarves", "belts", "sunglasses"] },
 ];
 
 export default function SideNav({ isOpen, onClose, activeCategory, onCategoryChange }) {
   const [expanded, setExpanded] = useState(null);
+  const { t } = useLanguage();
 
-  const handleCategoryClick = (catName) => {
-    if (expanded === catName) {
+  const handleCategoryClick = (catKey) => {
+    if (expanded === catKey) {
       setExpanded(null);
     } else {
-      setExpanded(catName);
+      setExpanded(catKey);
     }
   };
 
-  const handleSubCategoryClick = (parentName) => {
-    onCategoryChange(parentName);
+  const handleSubCategoryClick = (catKey) => {
+    onCategoryChange(t("categories." + catKey));
     onClose();
     setExpanded(null);
   };
 
-  const handleAllClick = (catName) => {
-    onCategoryChange(catName);
+  const handleAllClick = (catKey) => {
+    onCategoryChange(t("categories." + catKey));
     onClose();
     setExpanded(null);
   };
@@ -53,7 +55,7 @@ export default function SideNav({ isOpen, onClose, activeCategory, onCategoryCha
           {/* Mobile close header */}
           <div className="flex items-center justify-between px-8 h-16 lg:hidden">
             <span className="text-[13px] font-medium text-gray-900 dark:text-white tracking-[0.2em] uppercase">
-              Menu
+              {t("nav.menu")}
             </span>
             <button
               onClick={onClose}
@@ -70,24 +72,24 @@ export default function SideNav({ isOpen, onClose, activeCategory, onCategoryCha
             {/* Main categories */}
             <ul className="px-8">
               {categories.map((cat) => (
-                <li key={cat.name}>
+                <li key={cat.key}>
                   <div className="border-b border-gray-100 dark:border-white/5 last:border-b-0">
                     <button
-                      onClick={() => handleCategoryClick(cat.name)}
+                      onClick={() => handleCategoryClick(cat.key)}
                       className="w-full flex items-center justify-between py-4 group cursor-pointer"
                     >
                       <span
                         className={`text-[13px] font-medium uppercase tracking-[0.2em] transition-colors duration-300 ${
-                          activeCategory === cat.name
+                          activeCategory === t("categories." + cat.key)
                             ? "text-gray-900 dark:text-white"
                             : "text-gray-500 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         }`}
                       >
-                        {cat.name}
+                        {t("categories." + cat.key)}
                       </span>
                       <svg
                         className={`w-4 h-4 text-gray-300 dark:text-gray-600 transition-transform duration-300 ${
-                          expanded === cat.name ? "rotate-45" : ""
+                          expanded === cat.key ? "rotate-45" : ""
                         }`}
                         fill="none"
                         viewBox="0 0 24 24"
@@ -101,27 +103,27 @@ export default function SideNav({ isOpen, onClose, activeCategory, onCategoryCha
                     {/* Sub-categories */}
                     <div
                       className={`overflow-hidden transition-all duration-400 ease-[cubic-bezier(0.25,0.1,0.25,1)] ${
-                        expanded === cat.name ? "max-h-[400px] opacity-100 pb-4" : "max-h-0 opacity-0"
+                        expanded === cat.key ? "max-h-[400px] opacity-100 pb-4" : "max-h-0 opacity-0"
                       }`}
                     >
                       <button
-                        onClick={() => handleAllClick(cat.name)}
+                        onClick={() => handleAllClick(cat.key)}
                         className="block w-full text-left text-[12px] font-medium uppercase tracking-[0.15em] text-gray-900 dark:text-white mb-3 hover:opacity-50 transition-opacity cursor-pointer"
                       >
-                        View All {cat.name}
+                        {t("subcategories.viewAllCategory", { category: t("categories." + cat.key) })}
                       </button>
                       <ul className="space-y-2">
                         {cat.sub.map((sub) => (
                           <li key={sub}>
                             <button
-                              onClick={() => handleSubCategoryClick(cat.name)}
+                              onClick={() => handleSubCategoryClick(cat.key)}
                               className={`text-[12px] tracking-[0.1em] transition-colors duration-300 cursor-pointer ${
-                                activeCategory === sub
+                                activeCategory === t("subcategories." + sub)
                                   ? "text-gray-900 dark:text-white font-medium"
                                   : "text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white"
                               }`}
                             >
-                              {sub}
+                              {t("subcategories." + sub)}
                             </button>
                           </li>
                         ))}
@@ -136,13 +138,17 @@ export default function SideNav({ isOpen, onClose, activeCategory, onCategoryCha
           {/* Bottom links */}
           <div className="px-8 py-8 border-t border-gray-100 dark:border-white/5">
             <ul className="space-y-4">
-              {["Store Locator", "Help", "Contact Us"].map((link) => (
-                <li key={link}>
+              {[
+                { key: "storeLocator", label: t("nav.storeLocator") },
+                { key: "help", label: t("nav.help") },
+                { key: "contactUs", label: t("nav.contactUs") },
+              ].map((link) => (
+                <li key={link.key}>
                   <button
                     onClick={onClose}
                     className="text-[11px] font-medium uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer text-left"
                   >
-                    {link}
+                    {link.label}
                   </button>
                 </li>
               ))}

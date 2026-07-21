@@ -4,6 +4,7 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import loginAnimation from "../assets/Animations/Login Character Animation.json";
 import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -14,13 +15,14 @@ export default function LoginPage() {
   const { login } = useAuth();
   const toast = useToast();
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const validate = () => {
     const errs = {};
-    if (!email) errs.email = "Email is required";
-    else if (!/^\S+@\S+\.\S+$/.test(email)) errs.email = "Invalid email format";
-    if (!password) errs.password = "Password is required";
-    else if (password.length < 6) errs.password = "Password must be at least 6 characters";
+    if (!email) errs.email = t("common.emailRequired");
+    else if (!/^\S+@\S+\.\S+$/.test(email)) errs.email = t("common.invalidEmail");
+    if (!password) errs.password = t("common.passwordRequired");
+    else if (password.length < 6) errs.password = t("common.passwordMinLength");
     return errs;
   };
 
@@ -33,7 +35,7 @@ export default function LoginPage() {
     setIsLoading(true);
     try {
       await login(email, password);
-      toast.success("Welcome back!");
+      toast.success(t("auth.welcomeToast"));
       navigate("/");
     } catch (err) {
       toast.error(err.message);
@@ -54,25 +56,25 @@ export default function LoginPage() {
         <div className="w-full max-w-md mx-auto">
 
           <div className="mb-8">
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">Welcome back</h2>
-            <p className="text-gray-500 dark:text-gray-400 mt-2">Sign in to your account to continue</p>
+            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white tracking-tight">{t("auth.welcomeBack")}</h2>
+            <p className="text-gray-500 dark:text-gray-400 mt-2">{t("auth.signInSubtitle")}</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5" noValidate>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email address</label>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t("common.emailAddress")}</label>
               <input
-                id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@example.com"
+                id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder={t("auth.emailPlaceholder")}
                 className={`w-full px-4 py-3 bg-white dark:bg-white/5 border rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 shadow-sm dark:shadow-white/5 ${errors.email ? "border-red-400 focus:ring-red-500" : "border-gray-300 dark:border-white/10 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent"}`}
               />
               {errors.email && <p className="text-xs text-red-500 mt-1">{errors.email}</p>}
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t("common.password")}</label>
               <div className="relative">
                 <input
-                  id="password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Enter your password"
+                  id="password" type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} placeholder={t("auth.passwordPlaceholder")}
                   className={`w-full px-4 py-3 bg-white dark:bg-white/5 border rounded-lg text-sm text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 transition-all duration-200 shadow-sm dark:shadow-white/5 pr-12 ${errors.password ? "border-red-400 focus:ring-red-500" : "border-gray-300 dark:border-white/10 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent"}`}
                 />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer">
@@ -89,24 +91,24 @@ export default function LoginPage() {
             <div className="flex items-center justify-between gap-2">
               <label className="flex items-center gap-2 cursor-pointer">
                 <input type="checkbox" className="w-4 h-4 rounded border-gray-300 dark:border-white/20 text-gray-900 dark:text-white focus:ring-gray-900 dark:focus:ring-white" />
-                <span className="text-sm text-gray-600 dark:text-gray-400">Remember me</span>
+                <span className="text-sm text-gray-600 dark:text-gray-400">{t("auth.rememberMe")}</span>
               </label>
-              <Link to="/forgot-password" className="text-sm font-medium text-gray-900 dark:text-white hover:underline transition-colors">Forgot password?</Link>
+              <Link to="/forgot-password" className="text-sm font-medium text-gray-900 dark:text-white hover:underline transition-colors">{t("auth.forgotPassword")}</Link>
             </div>
 
             <button type="submit" disabled={isLoading} className="w-full py-3 px-4 bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium rounded-lg text-sm transition-all duration-200 hover:bg-gray-800 dark:hover:bg-gray-100 shadow-sm disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
               {isLoading ? (
                 <div className="flex items-center justify-center gap-2">
                   <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
-                  Signing in...
+                  {t("auth.signingIn")}
                 </div>
-              ) : "Sign in"}
+              ) : t("auth.signIn")}
             </button>
           </form>
 
           <p className="text-center text-sm text-gray-500 dark:text-gray-400 mt-8">
-            Don&apos;t have an account?{" "}
-            <Link to="/signup" className="font-medium text-gray-900 dark:text-white hover:underline transition-colors">Create an account</Link>
+            {t("auth.noAccount")}{" "}
+            <Link to="/signup" className="font-medium text-gray-900 dark:text-white hover:underline transition-colors">{t("auth.createAccount")}</Link>
           </p>
         </div>
       </div>
