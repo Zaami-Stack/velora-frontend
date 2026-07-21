@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useToast } from "../context/ToastContext";
 import { useLanguage } from "../context/LanguageContext";
+import { formatPrice } from "../utils/currency";
 
 const quickSizes = ["XS", "S", "M", "L"];
 
@@ -49,8 +50,8 @@ export default function ProductCard({ product, variant = "default" }) {
           <h3 className="text-2xl md:text-3xl font-light text-white tracking-wide mb-2">{product.name}</h3>
           <p className="text-sm text-white/60 mb-4 max-w-md">{product.description || product.category}</p>
           <div className="flex items-center gap-3 mb-6">
-            <span className="text-lg font-semibold text-white">${product.price}</span>
-            {product.originalPrice && <span className="text-sm text-white/40 line-through">${product.originalPrice}</span>}
+            <span className="text-lg font-semibold text-white">{formatPrice(product.price)}</span>
+            {product.originalPrice && <span className="text-sm text-white/40 line-through">{formatPrice(product.originalPrice)}</span>}
           </div>
           <button onClick={(e) => { e.stopPropagation(); navigate(`/product/${product.id}`); }} className="self-start px-8 py-3 bg-white text-gray-900 text-xs font-semibold uppercase tracking-wider hover:bg-gray-100 transition-all duration-300 cursor-pointer">
             {t("product.shopNow")}
@@ -119,8 +120,8 @@ export default function ProductCard({ product, variant = "default" }) {
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 uppercase tracking-wider">{product.category}</p>
           </div>
           <div className="flex items-center gap-2 shrink-0">
-            {product.originalPrice && <span className="text-xs text-gray-400 dark:text-gray-500 line-through">${product.originalPrice}</span>}
-            <span className={`text-sm font-semibold ${product.originalPrice ? "text-rose-600" : "text-gray-900 dark:text-white"}`}>${product.price}</span>
+            {product.originalPrice && <span className="text-xs text-gray-400 dark:text-gray-500 line-through">{formatPrice(product.originalPrice)}</span>}
+            <span className={`text-sm font-semibold ${product.originalPrice ? "text-rose-600" : "text-gray-900 dark:text-white"}`}>{formatPrice(product.price)}</span>
           </div>
         </div>
 

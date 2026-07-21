@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
-import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
 import { useToast } from "../context/ToastContext";
 import { useLanguage } from "../context/LanguageContext";
+import { formatPrice } from "../utils/currency";
 import Layout from "../components/Layout";
 
 export default function WishlistPage() {
@@ -56,8 +57,8 @@ export default function WishlistPage() {
                   </Link>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{item.category}</p>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-sm font-semibold text-gray-900 dark:text-white">${item.price}</span>
-                    {item.originalPrice && <span className="text-xs text-gray-400 dark:text-gray-500 line-through">${item.originalPrice}</span>}
+                    <span className="text-sm font-semibold text-gray-900 dark:text-white">{formatPrice(item.price)}</span>
+                    {item.originalPrice && <span className="text-xs text-gray-400 dark:text-gray-500 line-through">{formatPrice(item.originalPrice)}</span>}
                   </div>
                   <button onClick={() => { toggle(item); toast.info(t("product.removedFromWishlist")); }}
                     className="mt-3 text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white underline underline-offset-4 transition-colors cursor-pointer">

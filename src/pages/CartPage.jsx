@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { useLanguage } from "../context/LanguageContext";
+import { formatPrice } from "../utils/currency";
 import Layout from "../components/Layout";
 
 export default function CartPage() {
@@ -39,7 +40,7 @@ export default function CartPage() {
                           {item.selectedSize && <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t("cart.size", { size: item.selectedSize })}</p>}
                           {item.selectedColor && <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{t("cart.color")} <span className="inline-block w-3 h-3 rounded-full border border-gray-200 dark:border-white/10 align-middle ml-1" style={{ backgroundColor: item.selectedColor }} /></p>}
                         </div>
-                        <span className="text-sm font-semibold text-gray-900 dark:text-white shrink-0">${(item.price * item.quantity).toFixed(2)}</span>
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white shrink-0">{formatPrice(item.price * item.quantity)}</span>
                       </div>
                       <div className="flex items-center justify-between mt-4">
                         <div className="flex items-center gap-3">
@@ -66,21 +67,21 @@ export default function CartPage() {
                 <div className="space-y-3 text-sm">
                   <div className="flex justify-between text-gray-600 dark:text-gray-400">
                     <span>{t("cart.subtotalItems", { count: totalItems })}</span>
-                    <span className="font-medium text-gray-900 dark:text-white">${totalPrice.toFixed(2)}</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{formatPrice(totalPrice)}</span>
                   </div>
                   {totalSavings > 0 && (
                     <div className="flex justify-between text-rose-600">
                       <span>{t("common.savings")}</span>
-                      <span className="font-medium">-${totalSavings.toFixed(2)}</span>
+                      <span className="font-medium">-{formatPrice(totalSavings)}</span>
                     </div>
                   )}
                   <div className="flex justify-between text-gray-600 dark:text-gray-400">
                     <span>{t("common.shipping")}</span>
-                    <span className="font-medium text-gray-900 dark:text-white">{totalDelivery === 0 ? t("common.free") : `$${totalDelivery.toFixed(2)}`}</span>
+                    <span className="font-medium text-gray-900 dark:text-white">{totalDelivery === 0 ? t("common.free") : formatPrice(totalDelivery)}</span>
                   </div>
                   <div className="border-t border-gray-200 dark:border-white/10 pt-3 flex justify-between">
                     <span className="text-sm font-semibold text-gray-900 dark:text-white">{t("common.total")}</span>
-                    <span className="text-sm font-bold text-gray-900 dark:text-white">${(totalPrice + totalDelivery).toFixed(2)}</span>
+                    <span className="text-sm font-bold text-gray-900 dark:text-white">{formatPrice(totalPrice + totalDelivery)}</span>
                   </div>
                 </div>
                 <Link to="/checkout" className="block w-full py-3.5 mt-6 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium tracking-wide text-center rounded-sm hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors">

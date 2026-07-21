@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { api } from "../../api";
 import { useToast } from "../../context/ToastContext";
 import { useLanguage } from "../../context/LanguageContext";
+import { formatPrice } from "../../utils/currency";
 
 export default function OrdersPage() {
   const { t } = useLanguage();
@@ -135,7 +136,7 @@ export default function OrdersPage() {
                   <p className="text-xs text-gray-500 mt-0.5 truncate max-w-[150px] sm:max-w-none">{order.customerName} &middot; <span className="hidden sm:inline">{order.customerEmail}</span><span className="sm:hidden">{order.customerEmail?.split("@")[0]}</span>{order.customerPhone && <span className="hidden sm:inline"> &middot; {order.customerPhone}</span>}</p>
                 </div>
                 <p className="text-xs text-gray-500 hidden sm:block">{order.createdAt ? new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : "—"}</p>
-                <p className="text-sm font-bold text-white">${Number(order.total).toFixed(2)}</p>
+                <p className="text-sm font-bold text-white">{formatPrice(order.total)}</p>
                 <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold capitalize ${statusColors[order.status] || "bg-gray-400/10 text-gray-400"}`}>
                   {order.status}
                 </span>
@@ -157,7 +158,7 @@ export default function OrdersPage() {
                               <p className="text-sm text-white font-medium truncate">{item.name}</p>
                               <p className="text-xs text-gray-500 mt-0.5">{t("ordersPage.qtyEach", { count: item.quantity })}</p>
                             </div>
-                            <p className="text-sm font-semibold text-white">${(Number(item.price) * item.quantity).toFixed(2)}</p>
+                            <p className="text-sm font-semibold text-white">{formatPrice(Number(item.price) * item.quantity)}</p>
                           </div>
                         ))}
                       </div>
@@ -197,15 +198,15 @@ export default function OrdersPage() {
                         <div className="p-3 rounded-xl bg-white/[0.02] space-y-2">
                           <div className="flex justify-between text-sm">
                             <span className="text-gray-400">{t("ordersPage.subtotal")}</span>
-                            <span className="text-white">${Number(order.subtotal).toFixed(2)}</span>
+                            <span className="text-white">{formatPrice(order.subtotal)}</span>
                           </div>
                           <div className="flex justify-between text-sm">
                             <span className="text-gray-400">{t("ordersPage.shipping")}</span>
-                            <span className="text-white">{Number(order.shipping) === 0 ? t("common.free") : `$${Number(order.shipping).toFixed(2)}`}</span>
+                            <span className="text-white">{Number(order.shipping) === 0 ? t("common.free") : formatPrice(order.shipping)}</span>
                           </div>
                           <div className="border-t border-white/5 pt-2 flex justify-between text-sm">
                             <span className="text-white font-semibold">{t("ordersPage.total")}</span>
-                            <span className="text-white font-bold">${Number(order.total).toFixed(2)}</span>
+                            <span className="text-white font-bold">{formatPrice(order.total)}</span>
                           </div>
                         </div>
                       </div>

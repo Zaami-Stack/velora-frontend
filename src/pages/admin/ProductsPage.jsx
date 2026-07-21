@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { api } from "../../api";
 import { useToast } from "../../context/ToastContext";
 import { useLanguage } from "../../context/LanguageContext";
+import { formatPrice } from "../../utils/currency";
 
 const CATEGORIES = ["Blazers", "Dresses", "Tops", "Pants", "Knitwear", "Shoes", "Bags", "Accessories"];
 const BADGES = ["", "New", "Sale"];
@@ -214,8 +215,8 @@ export default function ProductsPage() {
                   <p className="text-sm font-medium text-white truncate">{p.name}</p>
                   <p className="text-xs text-gray-500 mt-0.5">{categoryLabel(p.category, t)} &middot; ID: {p.id}</p>
                   <div className="flex items-center gap-2 mt-1.5">
-                    <span className="text-sm font-semibold text-white">${Number(p.price).toFixed(2)}</span>
-                    {p.originalPrice && <span className="text-xs text-gray-500 line-through">${Number(p.originalPrice).toFixed(2)}</span>}
+                    <span className="text-sm font-semibold text-white">{formatPrice(p.price)}</span>
+                    {p.originalPrice && <span className="text-xs text-gray-500 line-through">{formatPrice(p.originalPrice)}</span>}
                   </div>
                   <div className="flex items-center gap-2 mt-1.5">
                     {p.badge ? (

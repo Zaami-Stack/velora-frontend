@@ -6,6 +6,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useTheme } from "../context/ThemeContext";
 import { useLanguage } from "../context/LanguageContext";
 import { api } from "../api";
+import { formatPrice } from "../utils/currency";
 import Logo from "./Logo";
 
 export default function Header({ onMenuToggle }) {
@@ -107,7 +108,7 @@ export default function Header({ onMenuToggle }) {
                   <button key={p.id} onClick={() => { setSearchOpen(false); setSearchQuery(""); setSearchResults([]); navigate(`/product/${p.id}`); }}
                     className="w-full flex items-center gap-3 px-4 py-3 hover:bg-gray-50 dark:hover:bg-white/5 transition-colors text-left cursor-pointer">
                     <img src={p.image} alt={p.name} className="w-10 h-12 object-cover rounded" />
-                    <div><p className="text-sm font-medium text-gray-900 dark:text-white">{p.name}</p><p className="text-xs text-gray-500 dark:text-gray-400">${p.price}</p></div>
+                    <div><p className="text-sm font-medium text-gray-900 dark:text-white">{p.name}</p><p className="text-xs text-gray-500 dark:text-gray-400">{formatPrice(p.price)}</p></div>
                   </button>
                 ))}
               </div>
@@ -200,7 +201,7 @@ export default function Header({ onMenuToggle }) {
                       <img src={item.image} alt={item.name} className="w-16 h-20 object-cover rounded-lg" />
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">${Number(item.price).toFixed(2)} {item.selectedSize && `· ${item.selectedSize}`}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{formatPrice(Number(item.price))} {item.selectedSize && `· ${item.selectedSize}`}</p>
                         <div className="flex items-center gap-2 mt-2">
                           <button onClick={() => updateQuantity(item.cartKey, item.quantity - 1)} className="w-6 h-6 rounded-full border border-gray-200 dark:border-white/10 flex items-center justify-center text-gray-500 dark:text-gray-400 hover:border-gray-400 dark:hover:border-white/20 text-xs cursor-pointer" aria-label={t("common.decrement")}>-</button>
                           <span className="text-xs font-medium w-4 text-center text-gray-900 dark:text-white">{item.quantity}</span>
@@ -209,7 +210,7 @@ export default function Header({ onMenuToggle }) {
                       </div>
                       <div className="flex flex-col items-end justify-between">
                         <button onClick={() => removeItem(item.cartKey)} className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer"><svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg></button>
-                        <span className="text-sm font-semibold text-gray-900 dark:text-white">${(item.price * item.quantity).toFixed(2)}</span>
+                        <span className="text-sm font-semibold text-gray-900 dark:text-white">{formatPrice(item.price * item.quantity)}</span>
                       </div>
                     </div>
                   ))}
@@ -218,7 +219,7 @@ export default function Header({ onMenuToggle }) {
                   <div className="px-5 py-4 border-t border-gray-100 dark:border-white/5 bg-gray-50/50 dark:bg-white/[0.02]">
                     <div className="flex items-center justify-between mb-3">
                       <span className="text-sm text-gray-600 dark:text-gray-400">{t("common.subtotal")}</span>
-                      <span className="text-sm font-semibold text-gray-900 dark:text-white">${totalPrice.toFixed(2)}</span>
+                      <span className="text-sm font-semibold text-gray-900 dark:text-white">{formatPrice(totalPrice)}</span>
                     </div>
                     <button onClick={() => { setCartOpen(false); navigate("/checkout"); }} className="w-full py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-sm font-medium rounded-xl hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors cursor-pointer">{t("checkout.checkout")}</button>
                     <button onClick={() => { setCartOpen(false); navigate("/bag"); }} className="w-full py-2.5 mt-2 bg-transparent text-gray-600 dark:text-gray-400 text-xs font-medium hover:text-gray-900 dark:hover:text-white transition-colors cursor-pointer">{t("cart.proceedToCheckout")}</button>

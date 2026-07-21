@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useToast } from "../context/ToastContext";
 import { useLanguage } from "../context/LanguageContext";
+import { formatPrice } from "../utils/currency";
 import ProductCard from "../components/ProductCard";
 import Layout from "../components/Layout";
 
@@ -117,8 +118,8 @@ export default function ProductDetailPage() {
             <p className="text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4">{product.category}</p>
 
             <div className="flex items-center gap-3 mb-6">
-              <span className={`text-xl font-semibold ${product.originalPrice ? "text-rose-600" : "text-gray-900 dark:text-white"}`}>${product.price}</span>
-              {product.originalPrice && <span className="text-sm text-gray-400 dark:text-gray-500 line-through">${product.originalPrice}</span>}
+              <span className={`text-xl font-semibold ${product.originalPrice ? "text-rose-600" : "text-gray-900 dark:text-white"}`}>{formatPrice(product.price)}</span>
+              {product.originalPrice && <span className="text-sm text-gray-400 dark:text-gray-500 line-through">{formatPrice(product.originalPrice)}</span>}
             </div>
 
             {product.rating && (

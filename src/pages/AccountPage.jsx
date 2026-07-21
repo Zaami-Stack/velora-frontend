@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useToast } from "../context/ToastContext";
 import { useLanguage } from "../context/LanguageContext";
 import { api } from "../api";
+import { formatPrice } from "../utils/currency";
 import Layout from "../components/Layout";
 
 const STATUS_STEPS = [
@@ -274,7 +275,7 @@ export default function AccountPage() {
                             <button onClick={() => handleCancelOrder(order.id)} className="text-xs text-red-500 hover:text-red-700 dark:hover:text-red-400 underline underline-offset-4 transition-colors cursor-pointer">{t("account.cancelOrder")}</button>
                           )}
                         </div>
-                        <p className="text-sm font-semibold text-gray-900 dark:text-white">${Number(order.total || 0).toFixed(2)}</p>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{formatPrice(order.total || 0)}</p>
                       </div>
                     </div>
                   );

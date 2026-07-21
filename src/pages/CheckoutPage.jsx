@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useToast } from "../context/ToastContext";
 import { useLanguage } from "../context/LanguageContext";
 import { api } from "../api";
+import { formatPrice } from "../utils/currency";
 import Layout from "../components/Layout";
 
 export default function CheckoutPage() {
@@ -126,7 +127,7 @@ export default function CheckoutPage() {
                       <p className="text-xs text-gray-500 dark:text-gray-400">{item.selectedSize && t("checkout.size", { size: item.selectedSize })} {item.selectedColor && `· ${t("checkout.colorSelected")}`}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-sm font-medium text-gray-900 dark:text-white">${(item.price * item.quantity).toFixed(2)}</p>
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">{formatPrice(item.price * item.quantity)}</p>
                       <p className="text-xs text-gray-400 dark:text-gray-500">{t("checkout.qty", { count: item.quantity })}</p>
                     </div>
                   </div>
@@ -145,21 +146,21 @@ export default function CheckoutPage() {
               <div className="space-y-3 text-sm">
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span>{t("checkout.subtotalItems", { count: totalItems })}</span>
-                  <span className="font-medium text-gray-900 dark:text-white">${totalPrice.toFixed(2)}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{formatPrice(totalPrice)}</span>
                 </div>
                 {totalSavings > 0 && (
                   <div className="flex justify-between text-rose-600">
                     <span>{t("common.savings")}</span>
-                    <span className="font-medium">-${totalSavings.toFixed(2)}</span>
+                    <span className="font-medium">-{formatPrice(totalSavings)}</span>
                   </div>
                 )}
                 <div className="flex justify-between text-gray-600 dark:text-gray-400">
                   <span>{t("common.shipping")}</span>
-                  <span className="font-medium text-gray-900 dark:text-white">{totalDelivery === 0 ? t("common.free") : `$${totalDelivery.toFixed(2)}`}</span>
+                  <span className="font-medium text-gray-900 dark:text-white">{totalDelivery === 0 ? t("common.free") : formatPrice(totalDelivery)}</span>
                 </div>
                 <div className="border-t border-gray-200 dark:border-white/10 pt-3 flex justify-between">
                   <span className="text-sm font-semibold text-gray-900 dark:text-white">{t("common.total")}</span>
-                  <span className="text-sm font-bold text-gray-900 dark:text-white">${(totalPrice + totalDelivery).toFixed(2)}</span>
+                  <span className="text-sm font-bold text-gray-900 dark:text-white">{formatPrice(totalPrice + totalDelivery)}</span>
                 </div>
               </div>
             </div>

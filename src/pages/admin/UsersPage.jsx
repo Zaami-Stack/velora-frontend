@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { api } from "../../api";
 import { useLanguage } from "../../context/LanguageContext";
+import { formatPrice } from "../../utils/currency";
 
 const avatarColors = [
   "from-violet-500 to-indigo-600",
@@ -82,12 +83,12 @@ export default function UsersPage() {
         </div>
         <div className="bg-white/[0.03] rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5">
           <p className="text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5 sm:mb-2">{t("usersPage.totalRevenue")}</p>
-          <p className="text-xl sm:text-2xl font-bold text-white">${users.reduce((sum, u) => sum + Number(u.totalSpent || 0), 0).toFixed(2)}</p>
+          <p className="text-xl sm:text-2xl font-bold text-white">{formatPrice(users.reduce((sum, u) => sum + Number(u.totalSpent || 0), 0))}</p>
         </div>
         <div className="bg-white/[0.03] rounded-xl sm:rounded-2xl p-3 sm:p-5 border border-white/5 col-span-2 sm:col-span-1">
           <p className="text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider mb-1.5 sm:mb-2">{t("usersPage.avgOrderValue")}</p>
           <p className="text-xl sm:text-2xl font-bold text-white">
-            ${users.length > 0 ? (users.reduce((sum, u) => sum + Number(u.totalSpent || 0), 0) / Math.max(users.reduce((sum, u) => sum + u.orderCount, 0), 1)).toFixed(2) : "0.00"}
+            {formatPrice(users.length > 0 ? (users.reduce((sum, u) => sum + Number(u.totalSpent || 0), 0) / Math.max(users.reduce((sum, u) => sum + u.orderCount, 0), 1)) : 0)}
           </p>
         </div>
       </div>
@@ -125,7 +126,7 @@ export default function UsersPage() {
                   <td className="px-6 py-3.5 text-sm text-gray-400">{u.phone || "—"}</td>
                   <td className="px-6 py-3.5 text-sm text-gray-400">{new Date(u.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
                   <td className="px-6 py-3.5 text-sm text-white font-medium">{u.orderCount}</td>
-                  <td className="px-6 py-3.5 text-sm font-semibold text-white">${Number(u.totalSpent).toFixed(2)}</td>
+                  <td className="px-6 py-3.5 text-sm font-semibold text-white">{formatPrice(u.totalSpent)}</td>
                   <td className="px-6 py-3.5">
                     {Number(u.isAdmin || u.is_admin) === 1 ? (
                       <span className="inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/10 text-white ring-1 ring-white/20">{t("common.admin")}</span>
@@ -161,7 +162,7 @@ export default function UsersPage() {
               </div>
               <div className="flex items-center gap-4 mt-2 ml-12">
                 <span className="text-[10px] text-gray-500">{t("usersPage.ordersCount", { count: u.orderCount })}</span>
-                <span className="text-[10px] font-semibold text-white">${Number(u.totalSpent).toFixed(2)}</span>
+                <span className="text-[10px] font-semibold text-white">{formatPrice(u.totalSpent)}</span>
                 <span className="text-[10px] text-gray-500">{new Date(u.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</span>
               </div>
             </div>

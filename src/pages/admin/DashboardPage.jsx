@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../api";
 import { useLanguage } from "../../context/LanguageContext";
+import { formatPrice } from "../../utils/currency";
 
 export default function DashboardPage() {
   const { t } = useLanguage();
@@ -63,7 +64,7 @@ export default function DashboardPage() {
     { label: t("dashboard.totalOrders"), value: data?.totalOrders || 0, color: "from-blue-500 to-cyan-400", bg: "bg-blue-500/10", icon: (
       <svg className="w-5 h-5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007z" /></svg>
     )},
-    { label: t("dashboard.revenue"), value: `$${(data?.totalRevenue || 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`, color: "from-emerald-500 to-teal-400", bg: "bg-emerald-500/10", icon: (
+    { label: t("dashboard.revenue"), value: `${(data?.totalRevenue || 0).toLocaleString("en-US", { minimumFractionDigits: 2 })} DH`, color: "from-emerald-500 to-teal-400", bg: "bg-emerald-500/10", icon: (
       <svg className="w-5 h-5 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
     )},
     { label: t("dashboard.customers"), value: data?.totalUsers || 0, color: "from-violet-500 to-purple-400", bg: "bg-violet-500/10", icon: (
@@ -136,7 +137,7 @@ export default function DashboardPage() {
                     <p className="text-xs text-gray-500">{order.customerEmail}</p>
                   </td>
                   <td className="px-6 py-3.5 text-sm text-gray-400">{new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</td>
-                  <td className="px-6 py-3.5 text-sm font-semibold text-white">${Number(order.total).toFixed(2)}</td>
+                  <td className="px-6 py-3.5 text-sm font-semibold text-white">{formatPrice(order.total)}</td>
                   <td className="px-6 py-3.5">
                     <span className={`inline-flex px-2.5 py-1 rounded-full text-[11px] font-semibold capitalize ${statusColors[order.status] || "bg-gray-400/10 text-gray-400"}`}>
                       {order.status}
@@ -167,7 +168,7 @@ export default function DashboardPage() {
                   <p className="text-[10px] text-gray-500">{new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
                 </div>
                 <div className="text-right ml-3">
-                  <p className="text-xs font-semibold text-white">${Number(order.total).toFixed(2)}</p>
+                  <p className="text-xs font-semibold text-white">{formatPrice(order.total)}</p>
                   <p className="text-[10px] text-gray-500">{t("common.items", { count: order.items?.length || 0 })}</p>
                 </div>
               </div>
