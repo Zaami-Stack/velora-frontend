@@ -202,13 +202,13 @@ export default function CheckoutPage() {
                 {appliedCoupon ? (
                   <div className="flex items-center justify-between">
                     <span className="text-xs text-green-600 dark:text-green-400">{appliedCoupon.code}</span>
-                    <button type="button" onClick={handleRemoveCoupon} className="text-xs text-gray-400 hover:text-white cursor-pointer">{t("common.remove")}</button>
+                    <button type="button" onClick={handleRemoveCoupon} className="text-xs text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">{t("common.remove")}</button>
                   </div>
                 ) : (
                   <div>
                     <div className="flex gap-2">
-                      <input type="text" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} placeholder={t("checkout.couponCode")} className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-xs text-white placeholder-gray-500 focus:outline-none focus:border-white/20" />
-                      <button type="button" onClick={handleApplyCoupon} disabled={couponLoading} className="px-3 py-2 bg-white/10 text-white text-xs font-medium rounded-lg hover:bg-white/15 transition-colors cursor-pointer disabled:opacity-50">{couponLoading ? "..." : t("checkout.applyCoupon")}</button>
+                      <input type="text" value={couponCode} onChange={(e) => setCouponCode(e.target.value.toUpperCase())} placeholder={t("checkout.couponCode")} className="flex-1 px-3 py-2 bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-lg text-xs text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:border-gray-300 dark:focus:border-white/20" />
+                      <button type="button" onClick={handleApplyCoupon} disabled={couponLoading} className="px-3 py-2 bg-gray-900 dark:bg-white/10 text-white text-xs font-medium rounded-lg hover:bg-gray-800 dark:hover:bg-white/15 transition-colors cursor-pointer disabled:opacity-50">{couponLoading ? "..." : t("checkout.applyCoupon")}</button>
                     </div>
                     {couponError && <p className="text-xs text-red-500 mt-1">{couponError}</p>}
                   </div>

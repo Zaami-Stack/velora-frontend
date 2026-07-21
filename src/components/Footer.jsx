@@ -31,7 +31,7 @@ export default function Footer() {
       </div>
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-5">
-          <p className="text-xs text-gray-600">{t("footer.rights")}</p>
+          <p className="text-xs text-gray-500">{t("footer.rights")}</p>
         </div>
       </div>
     </footer>
