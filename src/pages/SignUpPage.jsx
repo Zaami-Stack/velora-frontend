@@ -159,10 +159,24 @@ export default function SignUpPage() {
 
               <div>
                 <label htmlFor="securityQuestion" className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">{t("auth.question")}</label>
-                <select id="securityQuestion" value={securityQuestion} onChange={(e) => setSecurityQuestion(e.target.value)} className={inputClass("securityQuestion")}>
-                  <option value="">{t("auth.selectQuestion")}</option>
-                  {SECURITY_QUESTION_KEYS.map((key) => <option key={key} value={key}>{t(key)}</option>)}
-                </select>
+                <div className="relative">
+                  <select
+                    id="securityQuestion"
+                    value={securityQuestion}
+                    onChange={(e) => setSecurityQuestion(e.target.value)}
+                    className={`w-full px-4 py-3 pr-10 bg-white dark:bg-white/5 border rounded-lg text-sm text-gray-900 dark:text-white focus:outline-none focus:ring-2 transition-all duration-200 shadow-sm dark:shadow-white/5 appearance-none cursor-pointer ${errors.securityQuestion ? "border-red-400 focus:ring-red-500" : "border-gray-300 dark:border-white/10 focus:ring-gray-900 dark:focus:ring-white focus:border-transparent"}`}
+                  >
+                    <option value="" className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">{t("auth.selectQuestion")}</option>
+                    {SECURITY_QUESTION_KEYS.map((key) => (
+                      <option key={key} value={key} className="bg-white dark:bg-gray-800 text-gray-900 dark:text-white">{t(key)}</option>
+                    ))}
+                  </select>
+                  <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                    <svg className="w-4 h-4 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                    </svg>
+                  </div>
+                </div>
                 {errors.securityQuestion && <p className="text-xs text-red-500 mt-1">{errors.securityQuestion}</p>}
               </div>
 
