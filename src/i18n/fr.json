@@ -157,10 +157,14 @@
     "subscribedToast": "Inscription à la newsletter réussie !"
   },
   "footer": {
+    "quickLinks": "Liens Rapides",
+    "home": "Accueil",
+    "shop": "Boutique",
     "customerService": "Service client",
     "trackOrder": "Suivre ma commande",
     "returnsExchanges": "Retours & échanges",
     "shippingInfo": "Infos de livraison",
+    "help": "Aide",
     "about": "À propos",
     "ourStory": "Notre histoire",
     "careers": "Carrières",
@@ -177,6 +181,7 @@
     "mastercard": "Mastercard",
     "amex": "Amex",
     "paypal": "PayPal",
+    "rights": "© 2026 Velora. Tous droits réservés.",
     "copyright": "© 2026 Velora. Tous droits réservés."
   },
   "product": {
@@ -543,19 +548,24 @@
     "shipping": "Livraison",
     "discount": "Réduction",
     "total": "Total",
+    "orderId": "Numéro de commande",
+    "enterOrderId": "Entrez un numéro de commande pour commencer.",
+    "tracking": "Recherche...",
+    "orderItems": "Articles",
+    "qty": "Qté : {{count}}",
+    "summary": "Récapitulatif",
     "status": {
-      "pending": "Pending",
-      "processing": "Processing",
-      "shipped": "Shipped",
-      "delivered": "Delivered",
-      "cancelled": "Cancelled"
+      "pending": "En attente",
+      "processing": "En cours",
+      "shipped": "Expédiée",
+      "delivered": "Livrée",
+      "cancelled": "Annulée"
     },
     "timeline": {
-      "ordered": "Order Placed",
-      "confirmed": "Confirmed",
-      "shipped": "Shipped",
-      "outForDelivery": "Out for Delivery",
-      "delivered": "Delivered"
+      "pending": "Commande passée",
+      "processing": "En cours",
+      "shipped": "Expédiée",
+      "delivered": "Livrée"
     }
   },
   "couponsPage": {
@@ -667,7 +677,8 @@
     "howToMeasure": "Comment Mesurer",
     "chestTip": "Mesurez autour de la partie la plus large de votre poitrine",
     "waistTip": "Mesurez autour de votre taille naturelle",
-    "hipsTip": "Mesurez autour de la partie la plus large de vos hanches"
+    "hipsTip": "Mesurez autour de la partie la plus large de vos hanches",
+    "note": "Toutes les mesures sont en centimètres. Pour un ajustement optimal, nous vous recommandons de prendre vos mesures et de les comparer au tableau ci-dessus."
   },
   "header": {
     "trackOrder": "Suivre Commande"

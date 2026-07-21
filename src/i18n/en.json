@@ -157,10 +157,14 @@
     "subscribedToast": "Subscribed to newsletter!"
   },
   "footer": {
+    "quickLinks": "Quick Links",
+    "home": "Home",
+    "shop": "Shop",
     "customerService": "Customer Service",
     "trackOrder": "Track Order",
     "returnsExchanges": "Returns & Exchanges",
     "shippingInfo": "Shipping Info",
+    "help": "Help",
     "about": "About",
     "ourStory": "Our Story",
     "careers": "Careers",
@@ -177,6 +181,7 @@
     "mastercard": "Mastercard",
     "amex": "Amex",
     "paypal": "PayPal",
+    "rights": "© 2026 Velora. All rights reserved.",
     "copyright": "© 2026 Velora. All rights reserved."
   },
   "product": {
@@ -551,12 +556,17 @@
       "cancelled": "Cancelled"
     },
     "timeline": {
-      "ordered": "Order Placed",
-      "confirmed": "Confirmed",
+      "pending": "Order Placed",
+      "processing": "Processing",
       "shipped": "Shipped",
-      "outForDelivery": "Out for Delivery",
       "delivered": "Delivered"
-    }
+    },
+    "orderId": "Order ID",
+    "enterOrderId": "Enter an order ID to get started.",
+    "tracking": "Tracking...",
+    "orderItems": "Order Items",
+    "qty": "Qty: {{count}}",
+    "summary": "Summary"
   },
   "couponsPage": {
     "title": "Discount Coupons",
@@ -667,7 +677,8 @@
     "howToMeasure": "How to Measure",
     "chestTip": "Measure around the fullest part of your chest",
     "waistTip": "Measure around your natural waistline",
-    "hipsTip": "Measure around the fullest part of your hips"
+    "hipsTip": "Measure around the fullest part of your hips",
+    "note": "All measurements are in centimeters. For the best fit, we recommend taking your measurements and comparing them to the chart above."
   },
   "header": {
     "trackOrder": "Track Order"

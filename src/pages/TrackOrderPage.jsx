@@ -74,7 +74,7 @@ export default function TrackOrderPage() {
                   <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">{new Date(order.created_at || order.createdAt || order.date).toLocaleDateString()}</p>
                 </div>
                 <span className={`inline-flex px-2.5 py-1 text-[11px] font-semibold rounded-full ring-1 ${isCancelled ? "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400 ring-red-400/30" : "bg-emerald-50 dark:bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 ring-emerald-400/30"}`}>
-                  {isCancelled ? t("trackOrder.statusCancelled") : t(`trackOrder.status${order.status?.charAt(0).toUpperCase() + order.status?.slice(1)}`)}
+                  {isCancelled ? t("trackOrder.status.cancelled") : t(`trackOrder.status.${order.status}`)}
                 </span>
               </div>
 
@@ -83,7 +83,7 @@ export default function TrackOrderPage() {
                   <svg className="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                   </svg>
-                  <span className="text-[11px] font-semibold text-red-600 dark:text-red-400">{t("trackOrder.orderCancelled")}</span>
+                  <span className="text-[11px] font-semibold text-red-600 dark:text-red-400">{t("trackOrder.status.cancelled")}</span>
                 </div>
               ) : (
                 <div className="flex items-center">
@@ -112,7 +112,7 @@ export default function TrackOrderPage() {
                             )}
                           </div>
                           <span className={`text-[10px] mt-1.5 font-medium text-center ${isActive ? "text-gray-900 dark:text-white" : "text-gray-400 dark:text-gray-600"}`}>
-                            {t(`trackOrder.step${step.charAt(0).toUpperCase() + step.slice(1)}`)}
+                            {t(`trackOrder.timeline.${step}`)}
                           </span>
                         </div>
                         {i < STATUS_STEPS.length - 1 && (
