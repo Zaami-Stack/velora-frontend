@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, login, signup, logout, isAuthenticated: !!user, isAdmin: !!user && (user.is_admin === 1 || user.is_admin === true), loading }}>
+    <AuthContext.Provider value={{ user, login, signup, logout, isAuthenticated: !!user, isAdmin: !!user && (user.isAdmin === 1 || user.isAdmin === true || user.is_admin === 1 || user.is_admin === true), loading }}>
       {children}
     </AuthContext.Provider>
   );
