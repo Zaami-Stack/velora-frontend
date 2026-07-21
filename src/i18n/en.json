@@ -46,7 +46,8 @@
     "nameRequired": "Name is required",
     "somethingWentWrong": "Something went wrong",
     "unexpectedError": "An unexpected error occurred. Please try again.",
-    "reloadPage": "Reload Page"
+    "reloadPage": "Reload Page",
+    "language": "Language"
   },
   "nav": {
     "shop": "Shop",

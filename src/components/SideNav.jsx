@@ -15,7 +15,7 @@ const categories = [
 
 export default function SideNav({ isOpen, onClose, activeCategory, onCategoryChange }) {
   const [expanded, setExpanded] = useState(null);
-  const { t } = useLanguage();
+  const { t, lang, setLang } = useLanguage();
 
   useEffect(() => {
     if (isOpen) {
@@ -146,6 +146,31 @@ export default function SideNav({ isOpen, onClose, activeCategory, onCategoryCha
 
           {/* Bottom links */}
           <div className="px-8 py-6 sm:py-8 border-t border-gray-100 dark:border-white/5">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="text-[11px] font-medium uppercase tracking-[0.2em] text-gray-400 dark:text-gray-500">{t("common.language")}</span>
+              <div className="flex items-center bg-gray-100 dark:bg-white/10 rounded-full p-0.5">
+                <button
+                  onClick={() => setLang("en")}
+                  className={`px-2.5 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer ${
+                    lang === "en"
+                      ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                  }`}
+                >
+                  EN
+                </button>
+                <button
+                  onClick={() => setLang("fr")}
+                  className={`px-2.5 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer ${
+                    lang === "fr"
+                      ? "bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm"
+                      : "text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                  }`}
+                >
+                  FR
+                </button>
+              </div>
+            </div>
             <ul className="space-y-1">
               {[
                 { key: "storeLocator", label: t("nav.storeLocator") },

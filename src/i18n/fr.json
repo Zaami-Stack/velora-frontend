@@ -46,7 +46,8 @@
     "nameRequired": "Le nom est requis",
     "somethingWentWrong": "Une erreur est survenue",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
-    "reloadPage": "Recharger la page"
+    "reloadPage": "Recharger la page",
+    "language": "Langue"
   },
   "nav": {
     "shop": "Boutique",
